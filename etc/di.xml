@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+		<plugin disabled="false" name="Experius_Postcode_Plugin_Magento_Checkout_Block_Checkout_LayoutProcessor" sortOrder="10" type="Experius\Postcode\Plugin\Magento\Checkout\Block\Checkout\LayoutProcessor"/>
+	</type>
+	<type name="Magento\Framework\Console\CommandList">
+		<arguments>
+			<argument name="commands" xsi:type="array">
+				<item name="test" xsi:type="object">Experius\Postcode\Console\Command\Test</item>
+			</argument>
+		</arguments>
+	</type>
+	<preference for="Experius\Postcode\Api\PostcodeManagementInterface" type="Experius\Postcode\Model\PostcodeManagement" />
+</config>

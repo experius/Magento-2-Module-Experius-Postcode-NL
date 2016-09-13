@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/postcode/information" method="POST">
+        <service class="Experius\Postcode\Api\PostcodeManagementInterface" method="getPostcodeInformation"/>
+        <resources>
+           <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/postcode/information" method="GET">
+        <service class="Experius\Postcode\Api\PostcodeManagementInterface" method="getPostcodeInformation"/>
+        <resources>
+           <resource ref="anonymous" />
+        </resources>
+    </route>
+</routes>
