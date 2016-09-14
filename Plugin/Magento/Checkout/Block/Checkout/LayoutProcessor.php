@@ -24,7 +24,7 @@ class LayoutProcessor {
 		$result
 	){
        
-        if($this->scopeConfig->getValue('experius_ponumber/general/enabled',\Magento\Store\Model\ScopeInterface::SCOPE_STORE)){
+        if($this->scopeConfig->getValue('postcodenl_api/config/enabled',\Magento\Store\Model\ScopeInterface::SCOPE_STORE)){
 			
 			$shippingPostcodeFields = $this->getPostcodeFields('shippingAddress');
             
