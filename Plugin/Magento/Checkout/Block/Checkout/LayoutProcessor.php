@@ -88,9 +88,7 @@ class LayoutProcessor {
 	}
 	
 	public function getPostcodeFields($scope){
-		$postcodeTitle = __('Postcode');
-        $housnumberTitle = __('Housenumber');
-        
+		
 		$postcodeFields =    
 		[
 		 'experius_postcode_postcode'=>
@@ -106,10 +104,10 @@ class LayoutProcessor {
 				],
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_postcode',
-				'label' => $postcodeTitle,
+				'label' => __('Postcode'),
 				'sortOrder' => '1000',
 				'validation' => [
-					'required-entry' => $this->scopeConfig->getValue('experius_ponumber/general/required',\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+					'required-entry' => true,
 				],
 			]
 		, 'experius_postcode_housenumber'=>
@@ -125,10 +123,50 @@ class LayoutProcessor {
 				],
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_housenumber',
-				'label' => $housnumberTitle,
+				'label' => __('Housenumber'),
 				'sortOrder' => '1001',
 				'validation' => [
-					'required-entry' => $this->scopeConfig->getValue('experius_ponumber/general/required',\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+					'required-entry' => true,
+				],
+			],
+			'experius_postcode_housenumber_addition'=>
+			[
+				'component' => 'Magento_Ui/js/form/element/select',
+				'config' => [
+					"customerScope" => $scope,
+					"template" => 'ui/form/field',
+					"elementTmpl" => 'ui/form/element/select',
+					//"tooltip" => [
+					//    "description" => $ponumberToolTip
+					//]
+				],
+				'provider' => 'checkoutProvider',
+				'dataScope' => $scope . '.experius_postcode_housenumber_addition',
+				'label' => __('Addition'),
+				'sortOrder' => '1002',
+				'validation' => [
+					'required-entry' => false,
+				],
+				'options' => ['0'=>['value'=>'test','label'=>'test'],'1'=>['value'=>'test2','label'=>'test2']],
+				'visible' => false
+			],
+			'experius_postcode_disable'=>
+			[
+				'component' => 'Experius_Postcode/js/view/form/element/postcode',
+				'config' => [
+					"customerScope" => $scope,
+					"template" => 'ui/form/field',
+					"elementTmpl" => 'ui/form/element/checkbox',
+					//"tooltip" => [
+					//    "description" => $ponumberToolTip
+					//]
+				],
+				'provider' => 'checkoutProvider',
+				'dataScope' => $scope . '.experius_postcode_disable',
+				'label' => __('Enter address manually'),
+				'sortOrder' => '1004',
+				'validation' => [
+					'required-entry' => false,
 				],
 			]
 		];
