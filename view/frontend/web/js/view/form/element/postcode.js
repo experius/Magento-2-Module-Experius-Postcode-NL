@@ -36,7 +36,7 @@ define([
                 }, self.checkDelay);
                
             }
-            
+
             this.debug(this.parentName + ' ' + this.index +' ' + this.getInitialValue());
             
             if(this.index=='experius_postcode_disable' && this.getInitialValue()){    
@@ -182,7 +182,8 @@ define([
             
         },
         getSettings(){
-            return {'useStreet2AsHouseNumber': false, 'useStreet3AsHouseNumberAddition': false, 'debug':true}
+            var settings = window.checkoutConfig.experius_postcode.settings;
+            return settings;
         },
         getPostcodeInformation: function () {
             
@@ -238,7 +239,7 @@ define([
 
         },
         setHouseNumberAdditions: function(additions){
-            console.log(additions);
+
             if(registry.get(this.parentName + '.experius_postcode_housenumber_addition') && additions.length>1) {
                 
                 var options = [];
@@ -262,7 +263,9 @@ define([
             }
         },
         debug: function(message){
-            console.log(message);
+            if(this.getSettings().debug!='false'){
+                console.log(message);
+            }
         }
     });
 });

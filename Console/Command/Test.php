@@ -39,6 +39,10 @@ class Test extends Command {
 	){
 		$vat = $input->getArgument(self::NAME_ARGUMENT);
         $option = $input->getOption(self::NAME_OPTION);
+		
+		
+		print_r($this->postcodeHelper->getJsinit(false));
+		
         
         $testAddresses = [
 			'3512VT'=>'6'

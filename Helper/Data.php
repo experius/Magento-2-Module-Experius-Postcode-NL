@@ -60,48 +60,43 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper{
 		if ($getAdminConfig && !$this->_getStoreConfig('postcodenl_api/advanced_config/admin_validation_enabled'))
 			return '';
 
-		$baseUrl = $this->_getMagentoLookupUrl($getAdminConfig);
+		//$baseUrl = $this->_getMagentoLookupUrl($getAdminConfig);
 
-		$html = '
-			<script type="text/javascript">
-			//<![CDATA[
-				var PCNLAPI_CONFIG = {
-					baseUrl: "' . htmlspecialchars($baseUrl) . '",
-					useStreet2AsHouseNumber: ' . $this->_getConfigBoolString('postcodenl_api/advanced_config/use_street2_as_housenumber') . ',
-					useStreet3AsHouseNumberAddition: ' . $this->_getConfigBoolString('postcodenl_api/advanced_config/use_street3_as_housenumber_addition') . ',
-					blockPostOfficeBoxAddresses: '. $this->_getConfigBoolString('postcodenl_api/advanced_config/block_postofficeboxaddresses') . ',
-					neverHideCountry: ' . $this->_getConfigBoolString('postcodenl_api/advanced_config/never_hide_country') . ',
-					showcase: ' . $this->_getConfigBoolString('postcodenl_api/development_config/api_showcase') . ',
-					debug: ' . ($this->isDebugging() ? 'true' : 'false') . ',
-					translations: {
-						defaultError: "' . htmlspecialchars(__('Unknown postcode + housenumber combination.')) . '",
-						postcodeInputLabel: "' . htmlspecialchars(__('Postcode')) . '",
-						postcodeInputTitle: "' . htmlspecialchars(__('Postcode')) . '",
-						houseNumberAdditionUnknown: "' . htmlspecialchars(__('Housenumber addition `{addition}` is unknown.')) . '",
-						houseNumberAdditionRequired: "' . htmlspecialchars(__('Housenumber addition required.')) . '",
-						houseNumberLabel: "' . htmlspecialchars(__('Housenumber')) . '",
-						houseNumberTitle: "' . htmlspecialchars(__('Housenumber')) . '",
-						houseNumberAdditionLabel: "' . htmlspecialchars(__('Housenumber addition')) . '",
-						houseNumberAdditionTitle: "' . htmlspecialchars(__('Housenumber addition')) . '",
-						selectAddition: "' . htmlspecialchars(__('Select...')) . '",
-						noAdditionSelect: "' . htmlspecialchars(__('No addition.')) . '",
-						noAdditionSelectCustom: "' . htmlspecialchars(__('`No addition`')) . '",
-						additionSelectCustom: "' . htmlspecialchars(__('`{addition}`')) . '",
-						apiShowcase: "' . htmlspecialchars(__('API Showcase')) . '",
-						apiDebug: "' . htmlspecialchars(__('API Debug')) . '",
-						disabledText: "' . htmlspecialchars(__('- disabled -')) . '",
-						infoLabel: "' . htmlspecialchars(__('Address validation')) . '",
-						infoText: "' . htmlspecialchars(__('Fill out your postcode and housenumber to auto-complete your address.')) . '",
-						manualInputLabel: "' . htmlspecialchars(__('Manual input')) . '",
-						manualInputText: "' . htmlspecialchars(__('Fill out address information manually')) . '",
-						outputLabel: "' . htmlspecialchars(__('Validated address')) . '",
-						postOfficeBoxNotAllowed: "' . htmlspecialchars(__('Post office box not allowed.')) . '"
-					}
-				};
-			//]]>
-			</script>';
+		$settings = [
+					//"baseUrl"=> htmlspecialchars($baseUrl),
+					"useStreet2AsHouseNumber"=> $this->_getConfigBoolString('postcodenl_api/advanced_config/use_street2_as_housenumber'),
+					"useStreet3AsHouseNumberAddition"=> $this->_getConfigBoolString('postcodenl_api/advanced_config/use_street3_as_housenumber_addition'),
+					"blockPostOfficeBoxAddresses"=> $this->_getConfigBoolString('postcodenl_api/advanced_config/block_postofficeboxaddresses'),
+					"neverHideCountry"=> $this->_getConfigBoolString('postcodenl_api/advanced_config/never_hide_country'),
+					"showcase"=> $this->_getConfigBoolString('postcodenl_api/development_config/api_showcase'),
+					"debug"=> $this->isDebugging() ? 'true' : 'false',
+					"translations"=> [
+						"defaultError"=>  htmlspecialchars(__('Unknown postcode + housenumber combination.')) ,
+						"postcodeInputLabel"=>  htmlspecialchars(__('Postcode')) ,
+						"postcodeInputTitle"=>  htmlspecialchars(__('Postcode')) ,
+						"houseNumberAdditionUnknown"=>  htmlspecialchars(__('Housenumber addition `{addition}` is unknown.')) ,
+						"houseNumberAdditionRequired"=>  htmlspecialchars(__('Housenumber addition required.')) ,
+						"houseNumberLabel"=>  htmlspecialchars(__('Housenumber')) ,
+						"houseNumberTitle"=>  htmlspecialchars(__('Housenumber')) ,
+						"houseNumberAdditionLabel"=>  htmlspecialchars(__('Housenumber addition')) ,
+						"houseNumberAdditionTitle"=>  htmlspecialchars(__('Housenumber addition')) ,
+						"selectAddition"=>  htmlspecialchars(__('Select...')) ,
+						"noAdditionSelect"=>  htmlspecialchars(__('No addition.')) ,
+						"noAdditionSelectCustom"=>  htmlspecialchars(__('`No addition`')) ,
+						"additionSelectCustom"=>  htmlspecialchars(__('`{addition}`')) ,
+						"apiShowcase"=>  htmlspecialchars(__('API Showcase')) ,
+						"apiDebug"=>  htmlspecialchars(__('API Debug')) ,
+						"disabledText"=>  htmlspecialchars(__('- disabled -')) ,
+						"infoLabel"=>  htmlspecialchars(__('Address validation')) ,
+						"infoText"=>  htmlspecialchars(__('Fill out your postcode and housenumber to auto-complete your address.')) ,
+						"manualInputLabel"=>  htmlspecialchars(__('Manual input')) ,
+						"manualInputText"=>  htmlspecialchars(__('Fill out address information manually')) ,
+						"outputLabel"=>  htmlspecialchars(__('Validated address')) ,
+						"postOfficeBoxNotAllowed"=>  htmlspecialchars(__('Post office box not allowed.')) 
+					]
+		];
 
-		return $html;
+		return $settings;
 	}
 
 	/**
@@ -409,13 +404,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper{
 		return 'false';
 	}
 
-	protected function _getMagentoLookupUrl($inAdmin = false)
-	{
-		if ($inAdmin)
-			return Mage::helper('adminhtml')->getUrl('*/pcnl/lookup', array('_secure' => true));
-
-		return Mage::getUrl('postcodenl_api/json', array('_secure' => true));
-	}
+	//protected function _getMagentoLookupUrl($inAdmin = false)
+	//{
+	//	if ($inAdmin)
+	//		return Mage::helper('adminhtml')->getUrl('*/pcnl/lookup', array('_secure' => true));
+	//
+	//	return Mage::getUrl('postcodenl_api/json', array('_secure' => true));
+	//}
 
 	protected function _curlHasSsl()
 	{

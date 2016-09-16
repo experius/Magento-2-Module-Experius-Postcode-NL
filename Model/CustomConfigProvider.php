@@ -32,7 +32,7 @@ class CustomConfigProvider implements ConfigProviderInterface
     {        
         $config = [
             'experius_postcode' => [
-                'settings' => $this->postcodeHelper->getVatRegexArray()
+                'settings' => $this->postcodeHelper->getJsinit(false)
             ]
         ];
         return $config;
