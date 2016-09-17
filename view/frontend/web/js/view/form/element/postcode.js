@@ -64,32 +64,42 @@ define([
         },
         onCheckedChanged: function () {
              if (this.index=='experius_postcode_disable' && this.getInitialValue()){
+                
+                if (registry.get(this.parentName + '.experius_postcode_housenumber_addition')) {
+                     registry.get(this.parentName + '.experius_postcode_housenumber_addition').set('visible',false);
+                }
+                
                 this.showFields();
                 return;
             } else if(this.index=='experius_postcode_disable') {
                 this.hideFields();
+                this.postcodeHasChanged();
             }
         },
         postcodeHasChanged: function () {
             
-            var self = this;
+            if(this.index=='experius_postcode_housenumber' || this.index=='experius_postcode_postcode'){
             
-            var formData = this.source.get(this.parentScope);
+                var self = this;
+                
+                var formData = this.source.get(this.parentScope);
+                
+                this.debug(formData);
+                
+                if(!formData.experius_postcode_disable) {
+                    this.hideFields();               
+                }            
+                
+                if(formData.experius_postcode_postcode && formData.experius_postcode_housenumber && !formData.experius_postcode_disable) {
+                    this.debug('start postcode lookup');
+                    clearTimeout(this.emailCheckTimeout);
+                    this.emailCheckTimeout = setTimeout(function () {
+                        self.getPostcodeInformation();
+                    }, self.checkDelay);
+                } else {
+                    this.debug('postcode or housenumber not set. ' + 'housenumber:' + formData.experius_postcode_housenumber + ' postcode:' + formData.experius_postcode_postcode);   
+                }
             
-            this.debug(formData);
-            
-            if(!formData.experius_postcode_disable) {
-                this.hideFields();               
-            }            
-            
-            if(formData.experius_postcode_postcode && formData.experius_postcode_housenumber && !formData.experius_postcode_disable) {
-                this.debug('start postcode lookup');
-                clearTimeout(this.emailCheckTimeout);
-                this.emailCheckTimeout = setTimeout(function () {
-                    self.getPostcodeInformation();
-                }, self.checkDelay);
-            } else {
-                this.debug('postcode or housenumber not set. ' + 'housenumber:' + formData.experius_postcode_housenumber + ' postcode:' + formData.experius_postcode_postcode);   
             }
 
         },
@@ -98,10 +108,12 @@ define([
             this.debug('hide magento default fields');
             
             if (registry.get(this.parentName + '.street')) {
-                registry.get(this.parentName + '.street').set('visible',false).set('label','');
+                registry.get(this.parentName + '.street').set('visible',false);
             }
             
-            registry.get(this.parentName + '.street.0').set('visible',false).set('labelVisible',false).set('disabled',true);
+            if(registry.get(this.parentName + '.street.0')) {
+                registry.get(this.parentName + '.street.0').set('visible',false).set('labelVisible',false).set('disabled',true);
+            }
             
             if(registry.get(this.parentName + '.street.1')) {
                 registry.get(this.parentName + '.street.1').set('visible',false).set('labelVisible',false).set('disabled',true);
@@ -141,10 +153,12 @@ define([
             this.debug('show magento default fields');
             
             if (registry.get(this.parentName + '.street')) {
-                registry.get(this.parentName + '.street').set('visible',true).set('label','');
+                registry.get(this.parentName + '.street').set('visible',true);
             }
             
-            registry.get(this.parentName + '.street.0').set('visible',true).set('labelVisible',false).set('disabled',false);
+            if(registry.get(this.parentName + '.street.0')) {
+                registry.get(this.parentName + '.street.0').set('visible',true).set('labelVisible',false).set('disabled',false);
+            }
             
             if(registry.get(this.parentName + '.street.1')) {
                 registry.get(this.parentName + '.street.1').set('visible',true).set('labelVisible',false).set('disabled',false);
@@ -176,10 +190,17 @@ define([
             
             // Hide postcode fields
             
-            registry.get(this.parentName + '.experius_postcode_postcode').set('visible',false)
-            registry.get(this.parentName + '.experius_postcode_housenumber').set('visible',false)
-            registry.get(this.parentName + '.experius_postcode_housenumber_addition').set('visible',false)
+            if (registry.get(this.parentName + '.experius_postcode_postcode')) {
+                registry.get(this.parentName + '.experius_postcode_postcode').set('visible',false);
+            }
             
+            if (registry.get(this.parentName + '.experius_postcode_housenumber')) {
+                registry.get(this.parentName + '.experius_postcode_housenumber').set('visible',false);
+            }
+            
+            if (registry.get(this.parentName + '.experius_postcode_housenumber_addition')) {
+                registry.get(this.parentName + '.experius_postcode_housenumber_addition').set('visible',false);
+            }
         },
         getSettings(){
             var settings = window.checkoutConfig.experius_postcode.settings;

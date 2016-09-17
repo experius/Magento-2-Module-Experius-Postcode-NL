@@ -131,7 +131,7 @@ class LayoutProcessor {
 			],
 			'experius_postcode_housenumber_addition'=>
 			[
-				'component' => 'Magento_Ui/js/form/element/select',
+				'component' => 'Experius_Postcode/js/view/form/element/select',
 				'config' => [
 					"customerScope" => $scope,
 					"template" => 'ui/form/field',
@@ -147,7 +147,8 @@ class LayoutProcessor {
 				'validation' => [
 					'required-entry' => false,
 				],
-				'options' => ['0'=>['value'=>'test','label'=>'test'],'1'=>['value'=>'test2','label'=>'test2']],
+				//'options' => ['0'=>['value'=>'test','label'=>'test'],'1'=>['value'=>'test2','label'=>'test2']],
+				'options' => [],
 				'visible' => false
 			],
 			'experius_postcode_disable'=>
