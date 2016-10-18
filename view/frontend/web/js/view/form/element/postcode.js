@@ -202,7 +202,7 @@ define([
                 registry.get(this.parentName + '.experius_postcode_housenumber_addition').set('visible',false);
             }
         },
-        getSettings(){
+        getSettings: function() {
             var settings = window.checkoutConfig.experius_postcode.settings;
             return settings;
         },

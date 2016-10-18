@@ -2,12 +2,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
 	<system>
 		<section id="postcodenl_api" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="999" translate="label">
-			<label>Postcode</label>
+			<label>Postcode.nl Api</label>
 			<tab>sales</tab>
 			<resource>Experius_Postcode::config_experius_postcode</resource>
-			<group id="config" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+			<group id="general" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
 				<label>Configuration</label>
-				<field id="enabled" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="select">
+				<field id="enabled" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="select" canRestore="1">
 					<label>Enabled</label>
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

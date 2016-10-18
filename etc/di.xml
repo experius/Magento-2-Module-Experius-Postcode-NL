@@ -6,7 +6,7 @@
 	<type name="Magento\Framework\Console\CommandList">
 		<arguments>
 			<argument name="commands" xsi:type="array">
-				<item name="test" xsi:type="object">Experius\Postcode\Console\Command\Test</item>
+				<item name="Experius_Postcode_Test" xsi:type="object">Experius\Postcode\Console\Command\Test</item>
 			</argument>
 		</arguments>
 	</type>

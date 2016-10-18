@@ -24,7 +24,7 @@ define([
             }
 
         },
-        getSettings(){
+        getSettings: function() {
             var settings = window.checkoutConfig.experius_postcode.settings;
             return settings;
         },

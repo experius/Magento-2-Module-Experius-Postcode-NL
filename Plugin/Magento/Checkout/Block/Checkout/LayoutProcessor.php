@@ -33,7 +33,7 @@ class LayoutProcessor {
 		$result
 	){
        
-        if($this->scopeConfig->getValue('experius_ponumber/general/enabled',\Magento\Store\Model\ScopeInterface::SCOPE_STORE)){
+        if($this->scopeConfig->getValue('postcodenl_api/general/enabled',\Magento\Store\Model\ScopeInterface::SCOPE_STORE)){
 			
 			$shippingPostcodeFields = $this->getPostcodeFields('shippingAddress');
             
@@ -97,10 +97,7 @@ class LayoutProcessor {
 				'config' => [
 					"customerScope" => $scope,
 					"template" => 'ui/form/field',
-					"elementTmpl" => 'ui/form/element/input',
-					//"tooltip" => [
-					//    "description" => $postcodeToolTip
-					//]
+					"elementTmpl" => 'ui/form/element/input'
 				],
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_postcode',
@@ -116,10 +113,7 @@ class LayoutProcessor {
 				'config' => [
 					"customerScope" => $scope,
 					"template" => 'Experius_Postcode/form/field',
-					"elementTmpl" => 'ui/form/element/input',
-					//"tooltip" => [
-					//    "description" => $ponumberToolTip
-					//]
+					"elementTmpl" => 'ui/form/element/input'
 				],
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_housenumber',
@@ -135,10 +129,7 @@ class LayoutProcessor {
 				'config' => [
 					"customerScope" => $scope,
 					"template" => 'ui/form/field',
-					"elementTmpl" => 'ui/form/element/select',
-					//"tooltip" => [
-					//    "description" => $ponumberToolTip
-					//]
+					"elementTmpl" => 'ui/form/element/select'
 				],
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_housenumber_addition',
@@ -147,7 +138,6 @@ class LayoutProcessor {
 				'validation' => [
 					'required-entry' => false,
 				],
-				//'options' => ['0'=>['value'=>'test','label'=>'test'],'1'=>['value'=>'test2','label'=>'test2']],
 				'options' => [],
 				'visible' => false
 			],
@@ -157,10 +147,7 @@ class LayoutProcessor {
 				'config' => [
 					"customerScope" => $scope,
 					"template" => 'ui/form/field',
-					"elementTmpl" => 'ui/form/element/checkbox',
-					//"tooltip" => [
-					//    "description" => $ponumberToolTip
-					//]
+					"elementTmpl" => 'ui/form/element/checkbox'
 				],
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_disable',

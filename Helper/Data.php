@@ -353,12 +353,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper{
 
 	protected function _getKey()
 	{
-		return trim($this->_getStoreConfig('postcodenl_api/config/api_key'));
+		return trim($this->_getStoreConfig('postcodenl_api/general/api_key'));
 	}
 
 	protected function _getSecret()
 	{
-		return trim($this->_getStoreConfig('postcodenl_api/config/api_secret'));
+		return trim($this->_getStoreConfig('postcodenl_api/general/api_secret'));
 	}
 
 	protected function _getServiceUrl()
@@ -420,7 +420,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper{
 
 	protected function _checkApiReady()
 	{
-		if (!$this->_debuggingOverride && !($this->_getStoreConfig('postcodenl_api/config/enabled') || $this->_getStoreConfig('postcodenl_api/advanced_config/admin_validation_enabled')))
+		if (!$this->_debuggingOverride && !($this->_getStoreConfig('postcodenl_api/general/enabled') || $this->_getStoreConfig('postcodenl_api/advanced_config/admin_validation_enabled')))
 			return array('message' => __('Postcode.nl API not enabled.'));
 
 		if ($this->_getServiceUrl() === '' || $this->_getKey() === '' || $this->_getSecret() === '')
