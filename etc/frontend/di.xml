@@ -7,4 +7,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Block\Onepage">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="experius_postcode_layoutprocessor" xsi:type="object">Experius\Postcode\Block\Checkout\LayoutProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

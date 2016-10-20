@@ -1,19 +1,10 @@
 <?php 
 
-/**
- * A Magento 2 module named Experius/Postcode
- * Copyright (C) 2016 Experius
- * 
- * This file included in Experius/Postcode is licensed under OSL 3.0
- * 
- * http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * Please see LICENSE.txt for the full text of the OSL 3.0 license
- */
 
-namespace Experius\Postcode\Plugin\Magento\Checkout\Block\Checkout;
+namespace Experius\Postcode\Block\Checkout;
  
  
-class LayoutProcessor {
+class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface{
     
     protected $scopeConfig;
 	
@@ -27,11 +18,7 @@ class LayoutProcessor {
 		$this->logger = $logger;
     }
 
-
-	public function afterProcess(
-		\Magento\Checkout\Block\Checkout\LayoutProcessor $subject,
-		$result
-	){
+	public function process($result){
        
         if($this->scopeConfig->getValue('postcodenl_api/general/enabled',\Magento\Store\Model\ScopeInterface::SCOPE_STORE)){
 			
@@ -161,7 +148,4 @@ class LayoutProcessor {
 		
 		return $postcodeFields;
 	}
-	
-	
-	
 }
