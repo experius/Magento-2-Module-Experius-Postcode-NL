@@ -20,14 +20,23 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
 	public function process($result){
        
-        if($this->scopeConfig->getValue('postcodenl_api/general/enabled',\Magento\Store\Model\ScopeInterface::SCOPE_STORE)){
+        if($this->scopeConfig->getValue('postcodenl_api/general/enabled',\Magento\Store\Model\ScopeInterface::SCOPE_STORE) &&
+            isset($result['components']['checkout']['children']['steps']['children']
+            ['shipping-step']['children']['shippingAddress']['children']
+            ['shipping-address-fieldset'])
+        ){
 			
 			$shippingPostcodeFields = $this->getPostcodeFields('shippingAddress');
             
 			$shippingFields = $result['components']['checkout']['children']['steps']['children']
 					 ['shipping-step']['children']['shippingAddress']['children']
 						 ['shipping-address-fieldset']['children'];
-			
+
+            if(isset($shippingFields['street'])){
+                unset($shippingFields['street']['children'][1]['validation']);
+                unset($shippingFields['street']['children'][2]['validation']);
+            }
+
 			$shippingFields = array_merge($shippingFields,$shippingPostcodeFields);
 			
 			$result['components']['checkout']['children']['steps']['children']
@@ -42,33 +51,37 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 	}
 	
 	public function getBillingFormFields($result){
-		
 
-        $paymentForms = $result['components']['checkout']['children']['steps']['children']
-					 ['billing-step']['children']['payment']['children']
-						 ['payments-list']['children'];
-		
-		foreach ($paymentForms as $paymentMethodForm => $paymentMethodValue) {
-			
-			$paymentMethodCode = str_replace('-form','',$paymentMethodForm);
-			
-			if(!isset($result['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['payments-list']['children'][$paymentMethodCode.'-form'])){
-				continue;
-			}
-			
-			$billingFields = $result['components']['checkout']['children']['steps']['children']
-					 ['billing-step']['children']['payment']['children']
-						 ['payments-list']['children'][$paymentMethodCode.'-form']['children']['form-fields']['children'];
-			
-			$billingPostcodeFields = $this->getPostcodeFields('billingAddress'.$paymentMethodCode);
-			
-			$billingFields = array_merge($billingFields,$billingPostcodeFields); 
-			
-			$result['components']['checkout']['children']['steps']['children']
-					 ['billing-step']['children']['payment']['children']
-						 ['payments-list']['children'][$paymentMethodCode.'-form']['children']['form-fields']['children'] = $billingFields;
-			
-		}
+        if(isset($result['components']['checkout']['children']['steps']['children']
+        ['billing-step']['children']['payment']['children']
+        ['payments-list'])) {
+
+            $paymentForms = $result['components']['checkout']['children']['steps']['children']
+            ['billing-step']['children']['payment']['children']
+            ['payments-list']['children'];
+
+            foreach ($paymentForms as $paymentMethodForm => $paymentMethodValue) {
+
+                $paymentMethodCode = str_replace('-form', '', $paymentMethodForm);
+
+                if (!isset($result['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['payments-list']['children'][$paymentMethodCode . '-form'])) {
+                    continue;
+                }
+
+                $billingFields = $result['components']['checkout']['children']['steps']['children']
+                ['billing-step']['children']['payment']['children']
+                ['payments-list']['children'][$paymentMethodCode . '-form']['children']['form-fields']['children'];
+
+                $billingPostcodeFields = $this->getPostcodeFields('billingAddress' . $paymentMethodCode);
+
+                $billingFields = array_merge($billingFields, $billingPostcodeFields);
+
+                $result['components']['checkout']['children']['steps']['children']
+                ['billing-step']['children']['payment']['children']
+                ['payments-list']['children'][$paymentMethodCode . '-form']['children']['form-fields']['children'] = $billingFields;
+
+            }
+        }
 		
 		return $result;
 

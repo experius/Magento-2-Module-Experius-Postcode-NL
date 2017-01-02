@@ -1,11 +1,14 @@
 {
     "name": "experius/module-postcode",
-    "description": "",
+    "description": "Magento 2 Postcode.nl Api lookup module",
     "authors": [
         {
             "email": "derrick@experius.nl",
             "name": "Derrick Heesbeen"
         }
+    ],
+    "license": [
+        "OSL-3.0"
     ],
     "minimum-stability": "dev",
     "require": {},
