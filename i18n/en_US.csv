@@ -1,0 +1,47 @@
+Postcode,Postcode
+Housenumber,Housenumber
+Addition,Addition
+"Enter address manually","Enter address manually"
+"Unknown postcode + housenumber combination.","Unknown postcode + housenumber combination."
+"Invalid postcode format, use `1234AB` format.","Invalid postcode format, use `1234AB` format."
+"Housenumber format is not valid.","Housenumber format is not valid."
+"Incorrect address.","Incorrect address."
+"Validation error, please use manual input.","Validation error, please use manual input."
+"Validation unavailable, please use manual input.","Validation unavailable, please use manual input."
+"The test connection could not be successfully completed.","The test connection could not be successfully completed."
+"Your server could not connect to the Postcode.nl server.","Your server could not connect to the Postcode.nl server."
+"Your servers' 'cURL SSL CA bundle' is missing or outdated. Further information:","Your servers' 'cURL SSL CA bundle' is missing or outdated. Further information:"
+"How to update/fix your CA cert bundle","How to update/fix your CA cert bundle"
+"About cURL SSL CA certificates","About cURL SSL CA certificates"
+"cURL cannot read/access the CA cert file:","cURL cannot read/access the CA cert file:"
+"Connection error.","Connection error."
+"Error message:","Error message:"
+"Google the error message","Google the error message"
+"Contact your hosting provider if problems persist.","Contact your hosting provider if problems persist."
+"The response from the Postcode.nl service could not be understood.","The response from the Postcode.nl service could not be understood."
+"The service might be temporarily unavailable, if problems persist, please contact <a href='mailto:info@postcode.nl'>info@postcode.nl</a>.","The service might be temporarily unavailable, if problems persist, please contact <a href='mailto:info@postcode.nl'>info@postcode.nl</a>."
+"Technical reason: No valid JSON was returned by the request.","Technical reason: No valid JSON was returned by the request."
+"`API Key` specified is incorrect.","`API Key` specified is incorrect."
+"`API Secret` specified is incorrect.","`API Secret` specified is incorrect."
+"Authentication is incorrect.","Authentication is incorrect."
+"Access is denied.","Access is denied."
+"Service reported an error.","Service reported an error."
+"Postcode.nl service message:","Postcode.nl service message:"
+"Technical reason: Received JSON data did not contain expected data.","Technical reason: Received JSON data did not contain expected data."
+"A test connection to the API was successfully completed.","A test connection to the API was successfully completed."
+"Postcode.nl API not enabled.","Postcode.nl API not enabled."
+"Postcode.nl API not configured.","Postcode.nl API not configured."
+"Configure your `API key` and `API secret`.","Configure your `API key` and `API secret`."
+"Cannot connect to Postcode.nl API: Server is missing SSL (https) support for CURL.","Cannot connect to Postcode.nl API: Server is missing SSL (https) support for CURL."
+Reset,Reset
+Submit,Submit
+"Postcode.nl Api","Postcode.nl Api"
+Configuration,Configuration
+Enabled,Enabled
+"Api key","Api key"
+"Api secret","Api secret"
+"Advanced Configuration","Advanced Configuration"
+"Use street 2 for housenumber","Use street 2 for housenumber"
+"Use street 3 for housenumber addition","Use street 3 for housenumber addition"
+"Always show country selector","Always show country selector"
+Debug,Debug

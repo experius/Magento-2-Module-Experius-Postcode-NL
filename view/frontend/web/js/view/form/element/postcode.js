@@ -49,6 +49,13 @@ define([
                 
             return this;
         },
+        countryIdObserver: function(){
+            if (registry.get(this.parentName + '.country_id')) {
+                $('#'+registry.get(this.parentName + '.country_id').get('uid')).change(function(){
+                   console.log('test');
+                });
+            }
+        },
         initObservable: function () {
             var rules = this.validation = this.validation || {};
 
@@ -64,15 +71,14 @@ define([
         },
         onCheckedChanged: function () {
              if (this.index=='experius_postcode_disable' && this.getInitialValue()){
-                this.showFields();
-                return;
+                 this.showFields();
+                 return;
             } else if(this.index=='experius_postcode_disable') {
                 this.hideFields();
-                this.postcodeHasChanged();
             }
         },
-        postcodeHasChanged: function () {
-            
+        postcodeHasChanged: function() {
+
             if(this.index=='experius_postcode_housenumber' || this.index=='experius_postcode_postcode'){
             
                 var self = this;
@@ -85,7 +91,7 @@ define([
                     this.hideFields();               
                 }            
                 
-                if(formData.experius_postcode_postcode && formData.experius_postcode_housenumber && !formData.experius_postcode_disable) {
+                if(formData.experius_postcode_postcode && formData.experius_postcode_housenumber && formData.experius_postcode_disable !== true) {
                     this.debug('start postcode lookup');
                     clearTimeout(this.emailCheckTimeout);
                     this.emailCheckTimeout = setTimeout(function () {
@@ -98,7 +104,7 @@ define([
             }
 
         },
-        hideFields(){
+        hideFields: function(){
             
             this.debug('hide magento default fields');
             
@@ -126,7 +132,7 @@ define([
                 registry.get(this.parentName + '.region').set('visible',false).set('labelVisible',false).set('disabled',true).setVisible(false);
             }
            
-            if (registry.get(this.parentName + '.country_id')) {
+            if (registry.get(this.parentName + '.country_id') && !this.getSettings().neverHideCountry) {
                 registry.get(this.parentName + '.country_id').set('visible',false).set('labelVisible',false).set('disabled',true);
             }
             
@@ -148,7 +154,7 @@ define([
             }
 
         },
-        showFields(){
+        showFields: function(){
             
             this.debug('show magento default fields');
             
@@ -176,7 +182,7 @@ define([
                 registry.get(this.parentName + '.region').set('visible',true).set('labelVisible',true).set('disabled',false).setVisible(true);
             }
            
-            if (registry.get(this.parentName + '.country_id')) {
+            if (registry.get(this.parentName + '.country_id') && !this.getSettings().neverHideCountry) {
                  registry.get(this.parentName + '.country_id').set('visible',true).set('labelVisible',true).set('disabled',false);
             }
            
@@ -204,6 +210,7 @@ define([
         },
         getSettings: function() {
             var settings = window.checkoutConfig.experius_postcode.settings;
+            console.log(settings);
             return settings;
         },
         getPostcodeInformation: function () {
@@ -227,11 +234,13 @@ define([
                 if (response.street) {
                     self.error(false);
                     
-                    if(!self.getSettings().useStreet2AsHouseNumber){
-                        registry.get(self.parentName + '.street.0').set('value',response.street + ' ' + response.houseNumber).set('error',false);
-                    } else {
+                    if(self.getSettings().useStreet2AsHouseNumber){
                         registry.get(self.parentName + '.street.0').set('value',response.street).set('error',false);
                         registry.get(self.parentName + '.street.1').set('value',response.houseNumber).set('error',false);
+                        self.debug('address on two lines');
+                    } else {
+                        registry.get(self.parentName + '.street.0').set('value',response.street + ' ' + response.houseNumber).set('error',false);
+                        self.debug('address on single line');
                     }
                     registry.get(self.parentName + '.country_id').set('value','NL').set('error',false);
                     registry.get(self.parentName + '.region_id').set('value',response.province).set('error',false);
@@ -264,7 +273,7 @@ define([
         },
         setHouseNumberAdditions: function(additions){
 
-            if(registry.get(this.parentName + '.experius_postcode_housenumber_addition') && additions.length>1) {
+            if(registry.get(this.parentName + '.experius_postcode_housenumber_addition') && additions.length>1 && !registry.get(this.parentName + '.experius_postcode_disable').get('value')) {
                 
                 var options = [];
                 $.each(additions, function(key,addition){
