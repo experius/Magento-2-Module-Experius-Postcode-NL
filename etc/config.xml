@@ -5,6 +5,9 @@
 			<general>
 				<enabled>0</enabled>
 			</general>
+			<advanced_config>
+				<never_hide_country>1</never_hide_country>
+			</advanced_config>
 		</postcodenl_api>
 	</default>
 </config>

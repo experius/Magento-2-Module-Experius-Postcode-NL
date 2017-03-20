@@ -18,6 +18,10 @@ define([
           isLoading: false,
           checkRequest: null,
           isPostcodeCheckComplete: null,
+          addressType: 'shipping',
+            imports: {
+                update: '${ $.parentName }.country_id:value'
+            }
         },
         initialize: function () {
             _.bindAll(this, 'reset');
@@ -37,23 +41,31 @@ define([
                
             }
 
-            this.debug(this.parentName + ' ' + this.index +' ' + this.getInitialValue());
-            
-            if(this.index=='experius_postcode_disable' && this.getInitialValue()){    
+            if(this.index=='experius_postcode_disable' && this.getInitialValue()){
                 this.showFields();
             }
             
             if(this.index=='experius_postcode_housenumber_addition' && this.getInitialValue()){
-                this.visible = false;   
+                this.visible = false;
             }
-                
+
             return this;
         },
-        countryIdObserver: function(){
-            if (registry.get(this.parentName + '.country_id')) {
-                $('#'+registry.get(this.parentName + '.country_id').get('uid')).change(function(){
-                   console.log('test');
-                });
+        update: function (value) {
+            if(this.index=='experius_postcode_disable'){
+                this.toggleFieldsByCountry(this.source.get(this.parentScope));
+            }
+        },
+        toggleFieldsByCountry: function(address){
+            if(address.country_id=='NL' && !address.experius_postcode_disable){
+                this.hideFields();
+                this.debug('hide fields based on country value');
+                registry.get(this.parentName + '.experius_postcode_disable').set('visible',true);
+            } else {
+                this.showFields();
+                this.debug('show fields based on country value');
+                registry.get(this.parentName + '.experius_postcode_disable').set('visible',false);
+                registry.get(this.parentName + '.experius_postcode_disable').set('value',false);
             }
         },
         initObservable: function () {
@@ -70,10 +82,10 @@ define([
             return this;
         },
         onCheckedChanged: function () {
-             if (this.index=='experius_postcode_disable' && this.getInitialValue()){
+            if (this.index=='experius_postcode_disable' && this.getInitialValue()){
                  this.showFields();
                  return;
-            } else if(this.index=='experius_postcode_disable') {
+            } else if(this.index=='experius_postcode_disable' && this.source.get(this.parentScope).country_id=='NL') {
                 this.hideFields();
             }
         },
@@ -87,11 +99,11 @@ define([
                 
                 this.debug(formData);
                 
-                if(!formData.experius_postcode_disable) {
+                if(!formData.experius_postcode_disable && formData.country_id=='NL') {
                     this.hideFields();               
                 }            
                 
-                if(formData.experius_postcode_postcode && formData.experius_postcode_housenumber && formData.experius_postcode_disable !== true) {
+                if(formData.experius_postcode_postcode && formData.experius_postcode_housenumber && formData.experius_postcode_disable !== true && formData.country_id=='NL') {
                     this.debug('start postcode lookup');
                     clearTimeout(this.emailCheckTimeout);
                     this.emailCheckTimeout = setTimeout(function () {
@@ -150,7 +162,7 @@ define([
 
             if(registry.get(this.parentName + '.experius_postcode_housenumber_addition'))
             {
-                registry.get(this.parentName + '.experius_postcode_housenumber_addition').set('visible', true);
+                registry.get(this.parentName + '.experius_postcode_housenumber_addition').set('visible', false);
             }
 
         },
@@ -210,7 +222,6 @@ define([
         },
         getSettings: function() {
             var settings = window.checkoutConfig.experius_postcode.settings;
-            console.log(settings);
             return settings;
         },
         getPostcodeInformation: function () {
@@ -296,7 +307,8 @@ define([
             }
         },
         debug: function(message){
-            if(this.getSettings().debug!='false'){
+            if(this.getSettings().debug){
+                console.log(this.parentName);
                 console.log(message);
             }
         }

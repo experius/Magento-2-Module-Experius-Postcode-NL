@@ -26,7 +26,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             ['shipping-address-fieldset'])
         ){
 			
-			$shippingPostcodeFields = $this->getPostcodeFields('shippingAddress');
+			$shippingPostcodeFields = $this->getPostcodeFields('shippingAddress','shipping');
             
 			$shippingFields = $result['components']['checkout']['children']['steps']['children']
 					 ['shipping-step']['children']['shippingAddress']['children']
@@ -72,7 +72,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 ['billing-step']['children']['payment']['children']
                 ['payments-list']['children'][$paymentMethodCode . '-form']['children']['form-fields']['children'];
 
-                $billingPostcodeFields = $this->getPostcodeFields('billingAddress' . $paymentMethodCode);
+                $billingPostcodeFields = $this->getPostcodeFields('billingAddress' . $paymentMethodCode,'billing');
 
                 $billingFields = array_merge($billingFields, $billingPostcodeFields);
 
@@ -87,7 +87,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
 	}
 	
-	public function getPostcodeFields($scope){
+	public function getPostcodeFields($scope,$addressType='shipping'){
 		
 		$postcodeFields =    
 		[
@@ -106,6 +106,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 				'validation' => [
 					'required-entry' => true,
 				],
+                'addressType'=> $addressType
 			]
 		, 'experius_postcode_housenumber'=>
 			[
@@ -122,6 +123,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 				'validation' => [
 					'required-entry' => true,
 				],
+                'addressType'=> $addressType
 			],
 			'experius_postcode_housenumber_addition'=>
 			[
@@ -139,7 +141,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 					'required-entry' => false,
 				],
 				'options' => [],
-				'visible' => false
+				'visible' => false,
+                'addressType'=> $addressType
 			],
 			'experius_postcode_disable'=>
 			[
@@ -156,6 +159,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 				'validation' => [
 					'required-entry' => false,
 				],
+                'addressType'=> $addressType
 			]
 		];
 		
