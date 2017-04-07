@@ -1,0 +1,61 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<fieldset id="experius-postcode-fieldset" class="fieldset" data-bind="css: additionalClasses, visible: visible" data-bind="blockLoader: isLoading" style="position: relative">
+    <legend class="label">
+        <span data-bind="text: element.label"></span>
+    </legend>
+    <div class="control">
+        <!-- ko foreach: { data: elems, as: 'element' } -->
+
+        <!-- ko if: element.visible() -->
+
+        <!-- ko ifnot: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
+        <!-- ko template: $parent.fieldTemplate --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
+        <!-- ko template: element.elementTmpl --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- /ko -->
+
+        <!-- /ko -->
+
+        <!-- ko if: validateWholeGroup -->
+        <!-- ko  foreach: { data: elems, as: 'element' } -->
+        <!-- ko if: element.error() && element.visible() -->
+        <label class="error" data-bind="attr: { for: uid }, text: element.error"></label>
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: element.notice -->
+        <div class="field-note" data-bind="attr: { id: element.noticeId }"><span data-bind="html: element.notice"></span></div>
+        <!-- /ko -->
+
+        <!-- ko if: element.error() -->
+        <div class="mage-error" data-bind="attr: { for: element.uid }, text: element.error" generated="true"></div>
+        <!-- /ko -->
+
+        <!-- ko if: element.warn() -->
+        <div class="message warning" generated="true"><span data-bind="text: element.warn"></span></div>
+        <!-- /ko -->
+
+        <div data-role="loader" class="loading-mask" data-bind="visible: isLoading" style="position: absolute">
+            <div class="loader">
+                <img data-bind="attr:{src: loaderImageHref }" alt="Loading..." style="position: absolute;">
+            </div>
+        </div>
+
+    </div>
+</fieldset>
+<style>
+    #experius-postcode-fieldset .field{ margin: 0 0 20px 0;}
+    #experius-postcode-fieldset .label{ margin: 0 0 8px 0;}
+    #experius-postcode-fieldset .field._required label:after{ content: '*'; color: #e02b27; font-size: 1.2rem;  margin: 0 0 0 5px;  }
+    .experius-postcode-hide { display: none; }
+</style>
