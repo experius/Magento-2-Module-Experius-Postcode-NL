@@ -68,7 +68,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper{
 					//"baseUrl"=> htmlspecialchars($baseUrl),
 					"useStreet2AsHouseNumber"=> $this->_getConfigBoolString('postcodenl_api/advanced_config/use_street2_as_housenumber'),
 					"useStreet3AsHouseNumberAddition"=> $this->_getConfigBoolString('postcodenl_api/advanced_config/use_street3_as_housenumber_addition'),
-					"neverHideCountry"=> true,
+					"neverHideCountry"=> $this->_getConfigBoolString('postcodenl_api/advanced_config/never_hide_country'),
 					"debug"=> False,
 					"translations"=> [
 						"defaultError"=>  htmlspecialchars(__('Unknown postcode + housenumber combination.'))

@@ -75,7 +75,6 @@ define([
             this.updatePreview();
         },
         toggleFieldsByCountry: function(address){
-            console.log(address);
             if(address.country_id=='NL' && !address.experius_postcode_disable) {
                 this.hideFields();
                 this.debug('hide fields based on country value');
@@ -173,7 +172,6 @@ define([
             this.debug('show magento default fields');
             
             if (registry.get(this.parentName + '.street')) {
-                console.log('show');
                 $('.experius-postcode-hide').removeClass('experius-postcode-hide').addClass('field street admin__control-fields required experius-postcode-show');
                 registry.get(this.parentName + '.street').set('additionalClasses','field street admin__control-fields required');
             }
@@ -238,7 +236,7 @@ define([
                 response = JSON.parse(data);
                 
                 self.debug(response);
-                
+
                 if (response.street) {
                     self.error(false);
                     

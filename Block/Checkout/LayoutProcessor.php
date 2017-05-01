@@ -39,7 +39,7 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
                 unset($shippingFields['street']['children'][2]['validation']);
             }
 
-            $shippingFields = array_merge($shippingFields,$this->getPostcodeFieldSet('shippingAddress'));
+            $shippingFields = array_merge($shippingFields,$this->getPostcodeFieldSet('shippingAddress','shipping'));
 
 			$result['components']['checkout']['children']['steps']['children']
 					 ['shipping-step']['children']['shippingAddress']['children']
@@ -74,7 +74,7 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
                 ['billing-step']['children']['payment']['children']
                 ['payments-list']['children'][$paymentMethodCode . '-form']['children']['form-fields']['children'];
 
-                $billingPostcodeFields = $this->getPostcodeFields('billingAddress' . $paymentMethodCode,'billing');
+                $billingPostcodeFields = $this->getPostcodeFieldSet('billingAddress' . $paymentMethodCode,'billing');
 
                 $billingFields = array_merge($billingFields, $billingPostcodeFields);
 
@@ -89,7 +89,7 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 
 	}
 
-	public function getPostcodeFieldSet($scope){
+	public function getPostcodeFieldSet($scope,$addressType){
         return [
             'experius_postcode_fieldset'=>
                 [
@@ -101,12 +101,14 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
                         "additionalClasses" => "experius_postcode_fieldset",
                         "loaderImageHref" => $this->getViewFileUrl('images/loader-1.gif')
                     ],
-                    'children' => $this->getPostcodeFields($scope,'shipping')
+                    'children' => $this->getPostcodeFields($scope,$addressType),
+                    'provider' => 'checkoutProvider',
+                    'addressType'=> $addressType
                 ]
         ];
     }
 	
-	public function getPostcodeFields($scope,$addressType='shipping'){
+	public function getPostcodeFields($scope,$addressType){
 		
 		$postcodeFields =    
 		[
