@@ -242,7 +242,7 @@ define([
                     
                     if(self.getSettings().useStreet2AsHouseNumber){
                         registry.get(self.parentName + '.street.0').set('value',response.street).set('error',false);
-                        registry.get(self.parentName + '.street.1').set('value',response.houseNumber).set('error',false);
+                        registry.get(self.parentName + '.street.1').set('value',response.houseNumber.toString()).set('error',false);
                         self.debug('address on two lines');
                     } else {
                         registry.get(self.parentName + '.street.0').set('value',response.street + ' ' + response.houseNumber).set('error',false);
@@ -318,7 +318,7 @@ define([
             var address = this.source.get(this.customerScope);
 
             $.each(address.street, function(index,street){
-                preview += street + '';
+                preview += street + ' ';
             });
 
             preview += "<br/>" + address.postcode + "<br/>";
