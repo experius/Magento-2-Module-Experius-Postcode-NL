@@ -6,7 +6,17 @@ define([
         options: {
             url: '',
             loaderIconUrl: '',
-            ajax: null
+            ajax: null,
+            fieldWrapHtml: "" +
+                "<div class='field'>" +
+                "<label class='label'>%label%</label>" +
+                "<div class='control'>" +
+                "%inputHtml%" +
+                "</div>" +
+                "</div> ",
+            addFields : {},
+            hideFields : {},
+            showFields: {}
         },
 
         _create: function () {
@@ -14,7 +24,15 @@ define([
         },
 
         _initObservers: function(){
+            this._addFields();
             this._hideFields();
+        },
+
+        _addFields: function(){
+
+            var fieldset = 'test';
+
+            $('div.field.street').before(fieldset);
         },
 
         _hideFields: function(){

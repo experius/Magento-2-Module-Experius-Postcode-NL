@@ -11,13 +11,11 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 	protected $logger;
     
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-		\Psr\Log\LoggerInterface $logger,
         \Magento\Framework\View\Element\Template\Context $context,
         array $data = []
     ){
-        $this->scopeConfig = $scopeConfig;
-		$this->logger = $logger;
+        $this->scopeConfig = $context->getScopeConfig();
+		$this->logger = $context->getLogger();
 
         parent::__construct($context, $data);
     }
