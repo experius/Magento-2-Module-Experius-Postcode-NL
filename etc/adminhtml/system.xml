@@ -38,6 +38,11 @@
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
+				<field id="change_sort_order" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select">
+					<label>Adjust address fields sort order in checkout</label>
+					<comment/>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
 				<field id="api_debug" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="label" type="select">
 					<label>Debug</label>
 					<comment/>

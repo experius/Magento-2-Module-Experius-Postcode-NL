@@ -9,6 +9,8 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
     protected $scopeConfig;
 	
 	protected $logger;
+
+	protected $changeFieldPositions = false;
     
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -27,9 +29,8 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
             ['shipping-step']['children']['shippingAddress']['children']
             ['shipping-address-fieldset'])
         ){
-			
-			$shippingPostcodeFields = $this->getPostcodeFields('shippingAddress','shipping');
-            
+            $this->changeFieldPositions = $this->scopeConfig->getValue('postcodenl_api/advanced_config/change_sort_order',\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+
 			$shippingFields = $result['components']['checkout']['children']['steps']['children']
 					 ['shipping-step']['children']['shippingAddress']['children']
 						 ['shipping-address-fieldset']['children'];
@@ -40,6 +41,12 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
             }
 
             $shippingFields = array_merge($shippingFields,$this->getPostcodeFieldSet('shippingAddress','shipping'));
+
+            if($this->changeFieldPositions){
+                $shippingFields = $this->changeAddressFieldPosition($shippingFields);
+            }
+
+            $shippingFields = $this->addClasses('shippingAddress',$shippingFields);
 
 			$result['components']['checkout']['children']['steps']['children']
 					 ['shipping-step']['children']['shippingAddress']['children']
@@ -77,6 +84,12 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
                 $billingPostcodeFields = $this->getPostcodeFieldSet('billingAddress' . $paymentMethodCode,'billing');
 
                 $billingFields = array_merge($billingFields, $billingPostcodeFields);
+
+                $billingFields = $this->addClasses('billingAddress' . $paymentMethodCode,$billingFields);
+
+                if($this->changeFieldPositions){
+                    $billingFields = $this->changeAddressFieldPosition($billingFields);
+                }
 
                 $result['components']['checkout']['children']['steps']['children']
                 ['billing-step']['children']['payment']['children']
@@ -186,4 +199,45 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 		
 		return $postcodeFields;
 	}
+
+	public function changeAddressFieldPosition($addressFields){
+
+	    if(isset($addressFields['street'])){
+            $addressFields['street']['sortOrder'] = '900';
+        }
+
+        if(isset($addressFields['postcode'])){
+            $addressFields['postcode']['sortOrder'] = '910';
+        }
+
+        if(isset($addressFields['city'])){
+            $addressFields['city']['sortOrder'] = '920';
+        }
+
+        if(isset($addressFields['region'])){
+            $addressFields['region']['sortOrder'] = '925';
+        }
+
+        if(isset($addressFields['region_id'])){
+            $addressFields['region_id']['sortOrder'] = '928';
+        }
+
+        if(isset($addressFields['country_id'])){
+            $addressFields['country_id']['sortOrder'] = '93ls0';
+        }
+
+        return $addressFields;
+
+    }
+
+    public function addClasses($scope,$addressFields){
+
+	    foreach(['street','region_id','region','country_id','city','postcode'] as $field){
+            if(isset($addressFields[$field])){
+                $addressFields[$field]['config']['additionalClasses'] = (isset($addressFields[$field]['config']['additionalClasses'])) ? $addressFields[$field]['config']['additionalClasses'] . ' ' . $scope . '-'. $field : $scope . '-' . $field;
+            }
+        }
+
+        return $addressFields;
+    }
 }
