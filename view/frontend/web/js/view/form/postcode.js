@@ -268,7 +268,8 @@ define([
                     if (!addition) {
                         options[key] = {'label':'No addition','labeltitle':'No addition','value':''};
                     } else {
-                        options[key] = {'label':addition,'labeltitle':addition,'value':addition};
+                        var additionStripped = addition.replace(" ", "");
+                        options[key] = {'label':additionStripped,'labeltitle':additionStripped,'value':additionStripped};
                     }
                 });
                 
