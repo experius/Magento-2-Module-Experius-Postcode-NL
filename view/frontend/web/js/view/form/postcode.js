@@ -93,6 +93,7 @@ define([
                 this.hideFields();
                 this.debug('hide fields based on country value');
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').set('visible', true);
+                this.updatePostcode();
             } else if(address.country_id=='NL' && address.experius_postcode_disable){
                 this.showFields();
                 this.debug('show fields based on country value and disable checkbox');
@@ -180,7 +181,7 @@ define([
 
                 $('.'+self.customerScope+'-'+fieldName).show();
 
-                if(fieldName==='region'){
+                if(fieldName==='region' && !$('div[name="'+self.customerScope+'.region_id"]').is(":visible")){
                     $('div[name="'+self.customerScope+'.'+fieldName+'"]').show();
                 }
 
@@ -198,7 +199,8 @@ define([
                     registry.get(self.parentName + '.' + fieldName).set('visible',false);
                 }
             });
-
+            
+            this.notice('');
         },
         getSettings: function() {
             var settings = window.checkoutConfig.experius_postcode.settings;
