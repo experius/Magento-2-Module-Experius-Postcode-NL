@@ -69,7 +69,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper{
 					"useStreet2AsHouseNumber"=> (boolean)$this->_getStoreConfig('postcodenl_api/advanced_config/use_street2_as_housenumber'),
 					"useStreet3AsHouseNumberAddition"=> $this->_getConfigBoolString('postcodenl_api/advanced_config/use_street3_as_housenumber_addition'),
 					"neverHideCountry"=> $this->_getConfigBoolString('postcodenl_api/advanced_config/never_hide_country'),
-					"debug"=> False,
+					"debug"=> $this->isDebugging(),
 					"translations"=> [
 						"defaultError"=>  htmlspecialchars(__('Unknown postcode + housenumber combination.'))
 					]
@@ -217,8 +217,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper{
 				'url' => $this->_getServiceUrl(),
 				'key' => $this->_getKey(),
 				'secret' => substr($this->_getSecret(), 0, 6) .'[hidden]',
-				'showcase' => $this->_getStoreConfig('postcodenl_api/development_config/api_showcase'),
-				'debug' => $this->_getStoreConfig('postcodenl_api/development_config/api_debug'),
+				'showcase' => $this->_getStoreConfig('postcodenl_api/advanced_config/api_showcase'),
+				'debug' => $this->_getStoreConfig('postcodenl_api/advanced_config/api_debug'),
 			),
 			'magentoVersion' => $this->_getMagentoVersion(),
 			'extensionVersion' => $this->_getExtensionVersion(),
