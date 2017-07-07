@@ -136,7 +136,7 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_postcode',
 				'label' => __('Postcode'),
-				'sortOrder' => '1000',
+				'sortOrder' => '915',
 				'validation' => [
 					'required-entry' => 1,
 				],
@@ -153,7 +153,7 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_housenumber',
 				'label' => __('Housenumber'),
-				'sortOrder' => '1001',
+				'sortOrder' => '925',
 				'validation' => [
 					'required-entry' => 1,
 				],
@@ -170,7 +170,7 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_housenumber_addition',
 				'label' => __('Addition'),
-				'sortOrder' => '1002',
+				'sortOrder' => '927',
 				'validation' => [
 					'required-entry' => false,
 				],
@@ -188,7 +188,7 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 				],
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_disable',
-				'label' => __('Enter address manually'),
+				'description' => __('Enter address manually'),
 				'sortOrder' => '1004',
 				'validation' => [
 					'required-entry' => false,
@@ -203,11 +203,11 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 	public function changeAddressFieldPosition($addressFields){
 
 	    if(isset($addressFields['street'])){
-            $addressFields['street']['sortOrder'] = '900';
+            $addressFields['street']['sortOrder'] = '910';
         }
 
         if(isset($addressFields['postcode'])){
-            $addressFields['postcode']['sortOrder'] = '910';
+            $addressFields['postcode']['sortOrder'] = '930';
         }
 
         if(isset($addressFields['city'])){
@@ -215,15 +215,15 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
         }
 
         if(isset($addressFields['region'])){
-            $addressFields['region']['sortOrder'] = '925';
+            $addressFields['region']['sortOrder'] = '940';
         }
 
         if(isset($addressFields['region_id'])){
-            $addressFields['region_id']['sortOrder'] = '928';
+            $addressFields['region_id']['sortOrder'] = '945';
         }
 
         if(isset($addressFields['country_id'])){
-            $addressFields['country_id']['sortOrder'] = '93ls0';
+            $addressFields['country_id']['sortOrder'] = '900';
         }
 
         return $addressFields;
