@@ -107,7 +107,10 @@ define([
         },
         updatePostcode: function(){
             var self = this;
-            setTimeout(function () {
+            if (self.getSettings().timeout != undefined){
+            	clearTimeout(self.getSettings().timeout);
+            }
+            self.getSettings().timeout = setTimeout(function () {
                 self.postcodeHasChanged();
             }, self.checkDelay);
         },
@@ -116,6 +119,10 @@ define([
             var self = this;
 
             var formData = this.source.get(this.customerScope);
+            
+            if (!formData){
+            	return;
+            }
 
             this.debug(formData);
 
@@ -140,7 +147,7 @@ define([
             this.debug('hide magento default fields');
 
             var self = this;
-            $.each(['street','region','country_id','city','postcode'], function(key,fieldName){
+            $.each(['street','country_id','city','postcode'], function(key,fieldName){
 
                 if(fieldName==='country_id' && self.getSettings().neverHideCountry){
                     // continue;
@@ -149,13 +156,19 @@ define([
                     $('.' + self.customerScope + '-' + fieldName).addClass('experius-postcode-hide');
 
                     $('.' + self.customerScope + '-' + fieldName).hide();
-
-                    if (fieldName === 'region') {
-                        $('div[name="' + self.customerScope + '.' + fieldName + '"]').hide();
-                    }
-
-                    if (registry.get(self.parentName + '.' + fieldName)) {
-                        registry.get(self.parentName + '.' + fieldName).set('visible', false).set('labelVisible', false).set('disabled', true);
+					
+					var element = registry.get(self.parentName + '.' + fieldName);
+                    if (element) {
+                		if (element.component.indexOf('/group') !== -1) {
+			                $.each(element.elems(), function (index, elem) {
+			                    elem.set('visible', false).set('labelVisible', false).set('disabled', true);
+			                });
+			                var additionalClasses = element.get('additionalClasses');
+			                additionalClasses['experius-postcode-hide'] = 'experius-postcode-hide';
+			                element.set('additionalClasses', additionalClasses);
+			            }else{
+                    		element.set('visible', false).set('labelVisible', false).set('disabled', true);
+                    	}
                     }
 
                 }
@@ -175,18 +188,24 @@ define([
             this.debug('show magento default fields');
 
             var self = this;
-            $.each(['street','region','country_id','city','postcode'], function(key,fieldName){
+            $.each(['street','country_id','city','postcode'], function(key,fieldName){
 
                 $('.'+self.customerScope+'-'+fieldName).removeClass('experius-postcode-hide');
 
                 $('.'+self.customerScope+'-'+fieldName).show();
 
-                if(fieldName==='region' && !$('div[name="'+self.customerScope+'.region_id"]').is(":visible")){
-                    $('div[name="'+self.customerScope+'.'+fieldName+'"]').show();
-                }
-
-                if (registry.get(self.parentName + '.' + fieldName)) {
-                    registry.get(self.parentName + '.' + fieldName).set('visible',true).set('labelVisible',true).set('disabled',false);
+                var element = registry.get(self.parentName + '.' + fieldName);
+                if (element) {
+            		if (element.component.indexOf('/group') !== -1) {
+		                $.each(element.elems(), function (index, elem) {
+		                    elem.set('visible',true).set('labelVisible',true).set('disabled',false);
+		                });
+		                var additionalClasses = element.get('additionalClasses');
+			                additionalClasses['experius-postcode-hide'] = '';
+			                element.set('additionalClasses', additionalClasses);
+		            }else{
+                		element.set('visible',true).set('labelVisible',true).set('disabled',false);
+                	}
                 }
             });
 
@@ -288,7 +307,6 @@ define([
         },
         debug: function(message){
             if(this.getSettings().debug){
-                console.log(this.parentName);
                 console.log(message);
             }
         },
