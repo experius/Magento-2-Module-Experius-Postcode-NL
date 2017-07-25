@@ -30,8 +30,10 @@ define([
                 return checkoutData.getShippingAddressFromData();
             } else if(this.addressType=='billing' && typeof checkoutData.getBillingAddressFromData() !== 'undefined' && checkoutData.getBillingAddressFromData()){
                 return checkoutData.getBillingAddressFromData();
-            } else {
+            } else if(this.source) {
                 return this.source.get(this.customerScope);
+            } else {
+                return;
             }
         },
         initialize: function () {
@@ -66,7 +68,7 @@ define([
             }
         },
         observeDisableCheckbox: function (value) {
-            if(value || this.source.get(this.customerScope).country_id!='NL'){
+            if(value){
                 this.showFields();
                 this.notice('')
             } else{
@@ -89,12 +91,12 @@ define([
             this.updatePreview();
         },
         toggleFieldsByCountry: function(address){
-            if(address.country_id=='NL' && !address.experius_postcode_disable) {
+            if(address && address.country_id=='NL' && !address.experius_postcode_disable) {
                 this.hideFields();
                 this.debug('hide fields based on country value');
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').set('visible', true);
                 this.updatePostcode();
-            } else if(address.country_id=='NL' && address.experius_postcode_disable){
+            } else if(address && address.country_id=='NL' && address.experius_postcode_disable){
                 this.showFields();
                 this.debug('show fields based on country value and disable checkbox');
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').set('visible',true);
@@ -117,7 +119,11 @@ define([
         postcodeHasChanged: function() {
 
             var self = this;
-
+			
+			if (!this.source) {
+                return;
+            }
+		
             var formData = this.source.get(this.customerScope);
             
             if (!formData){
@@ -229,6 +235,11 @@ define([
             
             var self = this;
             var response = false;
+			
+			if (!this.source) {
+                return;
+            }
+		
             var formData = this.source.get(this.customerScope);
 
             this.validateRequest();
@@ -312,6 +323,10 @@ define([
         },
         updatePreview: function(){
             var preview = '<i>';
+			
+			if (!this.source) {
+                return;
+            }
 
             var address = this.source.get(this.customerScope);
 
