@@ -71,7 +71,7 @@ define([
             if(value){
                 this.showFields();
                 this.notice('')
-            } else{
+            } else if (registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').get('visible')) {
                 this.hideFields();
                 this.updatePostcode();
             }
