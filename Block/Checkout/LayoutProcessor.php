@@ -174,7 +174,12 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 				'validation' => [
 					'required-entry' => false,
 				],
-				'options' => [],
+                'options' => [
+                    [
+                        'value' => '',
+                        'label' => __('No housenumber addition'),
+                    ]
+                ],
 				'visible' => false,
                 'addressType'=> $addressType
 			],
