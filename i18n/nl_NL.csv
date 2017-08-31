@@ -1,5 +1,6 @@
 Postcode,Postcode
 Housenumber,Huisnummer
+"Housenr.","Huisnr."
 Addition,Toevoeging
 "Enter address manually","Handmatig adres invullen"
 "Unknown postcode + housenumber combination.","Onbekende postcode + huisnummer combinatie."
@@ -45,4 +46,3 @@ Enabled,Geactiveerd
 "Use street 3 for housenumber addition","Gebruik street 3 voor huisnummer toevoeging"
 "Always show country selector","Toon altijd het land-selectie veld"
 Debug,Debug
-"No housenumber addition","Geen huisnummertoevoeging"

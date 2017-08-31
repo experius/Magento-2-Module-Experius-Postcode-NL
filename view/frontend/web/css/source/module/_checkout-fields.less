@@ -1,0 +1,63 @@
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .address {
+        .field {
+            input:disabled {
+                background: #dadada;
+                opacity: 1;
+            }
+        }
+    }
+
+    #experius-postcode-fieldset {
+        margin-bottom: 0px;
+        position: relative;
+
+        .field {
+            float: left;
+            padding-right: 20px;
+
+            &[name*='experius_postcode_postcode'] {
+                width: 110px;
+            }
+
+            &[name*='experius_postcode_housenumber'],
+            &[name*='experius_postcode_housenumber_addition'] {
+                width: 90px;
+            }
+
+            &[name*='experius_postcode_disable'] {
+                float: none;
+                clear: left;
+
+                .field:last-child {
+                    float: none;
+                    width: auto;
+                }
+
+                & > label.label {
+                    display: none;
+                }
+            }
+        }
+
+        .field-note {
+            display: none;
+        }
+
+        .loading-mask {
+            position: absolute;
+
+            .loader img {
+                position: absolute;
+            }
+        }
+    }
+
+    .experius-postcode-hide {
+        display: none;
+    }
+}
