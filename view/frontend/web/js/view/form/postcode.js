@@ -2,10 +2,9 @@ define([
     'jquery',
     'Magento_Ui/js/form/components/group',
     'Experius_Postcode/js/action/postcode',
-    'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/checkout-data',
     'uiRegistry'
-], function($,Abstract,getPostcodeInformation,quote,checkoutData,registry) {
+], function($,Abstract,getPostcodeInformation,checkoutData,registry) {
     'use strict';
     return Abstract.extend({
         defaults: {
@@ -14,6 +13,7 @@ define([
             isLoading: false,
             checkRequest: null,
             isPostcodeCheckComplete: null,
+            postcodeCheckValid: true,
             addressType: 'shipping',
             imports: {
                 observeCountry: '${ $.parentName }.country_id:value',
@@ -23,15 +23,19 @@ define([
                 observeAdditionDropdown: '${ $.parentName }.experius_postcode_fieldset.experius_postcode_housenumber_addition:value',
                 observeStreet: '${ $.parentName }.street:visible'
             },
-            visible: true
+            listens: {
+                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
+            },
+            visible: true,
         },
+
         getAddressData: function(){
             if(this.addressType=='shipping' && typeof checkoutData.getShippingAddressFromData() !== 'undefined' && checkoutData.getShippingAddressFromData()) {
                 return checkoutData.getShippingAddressFromData();
             } else if(this.addressType=='billing' && typeof checkoutData.getBillingAddressFromData() !== 'undefined' && checkoutData.getBillingAddressFromData()){
                 return checkoutData.getBillingAddressFromData();
             } else if(this.source) {
-                return this.source.get(this.customerScope);
+                return this.source.get(this.customScope);
             } else {
                 return;
             }
@@ -69,10 +73,13 @@ define([
         },
         observeDisableCheckbox: function (value) {
             if(value){
-                this.showFields();
+                this.enableFields();
+                this.postcodeCheckValid = true;
                 this.notice('')
+                this.error(null)
             } else if (registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').get('visible')) {
-                this.hideFields();
+                this.postcodeCheckValid = null;
+                this.disableFields();
                 this.updatePostcode();
             }
         },
@@ -93,15 +100,23 @@ define([
         toggleFieldsByCountry: function(address){
             if(address && address.country_id=='NL' && !address.experius_postcode_disable) {
                 this.hideFields();
+                this.disableFields();
+                this.postcodeCheckValid = null;
                 this.debug('hide fields based on country value');
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').set('visible', true);
                 this.updatePostcode();
             } else if(address && address.country_id=='NL' && address.experius_postcode_disable){
                 this.showFields();
+                this.enableFields();
+                this.postcodeCheckValid = true;
+                this.error(null)
                 this.debug('show fields based on country value and disable checkbox');
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').set('visible',true);
             } else {
                 this.showFields();
+                this.enableFields();
+                this.postcodeCheckValid = true;
+                this.error(null)
                 this.debug('show fields based on country value');
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').set('visible',false);
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').set('value',false);
@@ -124,8 +139,7 @@ define([
                 return;
             }
 		
-            var formData = this.source.get(this.customerScope);
-            
+            var formData = this.source.get(this.customScope);
             if (!formData){
             	return;
             }
@@ -143,40 +157,110 @@ define([
                     self.getPostcodeInformation();
                 }, self.checkDelay);
             } else {
+                if(self.getSettings().useStreet2AsHouseNumber){
+                    registry.get(self.parentName + '.street.1').set('value',formData.experius_postcode_housenumber).set('error',false);
+                    self.debug('address on two lines');
+                } else {
+                    registry.get(self.parentName + '.street.0').set('value',formData.street + ' ' + formData.experius_postcode_housenumber).set('error',false);
+                    self.debug('address on single line');
+                }
                 this.debug('postcode or housenumber not set. ' + 'housenumber:' + formData.experius_postcode_housenumber + ' postcode:' + formData.experius_postcode_postcode);
             }
             
 
         },
+
+        disableFields: function(){
+
+            this.debug('hide magento default fields');
+
+            var self = this;
+            $.each(['street.0','city','postcode'], function(key,fieldName){
+
+                var element = registry.get(self.parentName + '.' + fieldName);
+                if (element) {
+                    if (element.component.indexOf('/group') !== -1) {
+                        $.each(element.elems(), function (index, elem) {
+                            elem.set('disabled', true);
+                            if (fieldName == 'postcode') {
+                                elem.set('visible', false);
+                            }
+                        });
+                        var additionalClasses = element.get('additionalClasses');
+                    }else{
+                        element.set('disabled', true);
+                        if (fieldName == 'postcode') {
+                            element.set('visible', false);
+                        }
+                    }
+                }
+            });
+
+			var streetElement = registry.get(this.parentName + '.street').set('visible',true);
+			var additionalClasses = streetElement.get('additionalClasses');
+			                additionalClasses['experius-postcode-enabled'] = 'experius-postcode-enabled';
+			                streetElement.set('additionalClasses', additionalClasses);
+			
+
+            registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_postcode').set('visible',true);
+            registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber').set('visible',true);
+
+            if(registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber_addition'))
+            {
+                registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber_addition').set('visible', false);
+            }
+
+        },
+
+        enableFields: function(){
+
+            this.debug('show magento default fields');
+
+            var self = this;
+            $.each(['street.0','city'], function(key,fieldName){
+
+                var element = registry.get(self.parentName + '.' + fieldName);
+                if (element) {
+                    if (element.component.indexOf('/group') !== -1) {
+                        $.each(element.elems(), function (index, elem) {
+                            elem.set('visible',true).set('labelVisible',true).set('disabled',false);
+                        });
+                        var additionalClasses = element.get('additionalClasses');
+                        additionalClasses['experius-postcode-hide'] = '';
+                        element.set('additionalClasses', additionalClasses);
+                    }else{
+                        element.set('visible', true).set('labelVisible',true).set('disabled',false);
+                    }
+                }
+            });
+            
+            var streetElement = registry.get(this.parentName + '.street').set('visible',true);
+			var additionalClasses = streetElement.get('additionalClasses');
+			                additionalClasses['experius-postcode-enabled'] = '';
+			                streetElement.set('additionalClasses', additionalClasses);
+
+            this.notice('');
+        },
+
         hideFields: function(){
 
             this.debug('hide magento default fields');
 
             var self = this;
-            $.each(['street','country_id','city','postcode'], function(key,fieldName){
+            $.each(['postcode', 'street.1', 'street.2'], function(key,fieldName){
 
-                if(fieldName==='country_id' && self.getSettings().neverHideCountry){
-                    // continue;
-                } else {
-
-                    $('.' + self.customerScope + '-' + fieldName).addClass('experius-postcode-hide');
-
-                    $('.' + self.customerScope + '-' + fieldName).hide();
-					
-					var element = registry.get(self.parentName + '.' + fieldName);
-                    if (element) {
-                		if (element.component.indexOf('/group') !== -1) {
-			                $.each(element.elems(), function (index, elem) {
-			                    elem.set('visible', false).set('labelVisible', false).set('disabled', true);
-			                });
-			                var additionalClasses = element.get('additionalClasses');
-			                additionalClasses['experius-postcode-hide'] = 'experius-postcode-hide';
-			                element.set('additionalClasses', additionalClasses);
-			            }else{
-                    		element.set('visible', false).set('labelVisible', false).set('disabled', true);
-                    	}
+                var element = registry.get(self.parentName + '.' + fieldName);
+                if (element) {
+                    if (element.component.indexOf('/group') !== -1) {
+                        $.each(element.elems(), function (index, elem) {
+                            elem.set('visible', false).set('labelVisible', false).set('disabled', true);
+                        });
+                        var additionalClasses = element.get('additionalClasses');
+                        additionalClasses['experius-postcode-hide'] = 'experius-postcode-hide';
+                        element.set('additionalClasses', additionalClasses);
+                    }else{
+                        element.set('visible', false).set('labelVisible', false).set('disabled', true);
                     }
-
                 }
             });
 
@@ -189,16 +273,13 @@ define([
             }
 
         },
+
         showFields: function(){
-            
+
             this.debug('show magento default fields');
 
             var self = this;
-            $.each(['street','country_id','city','postcode'], function(key,fieldName){
-
-                $('.'+self.customerScope+'-'+fieldName).removeClass('experius-postcode-hide');
-
-                $('.'+self.customerScope+'-'+fieldName).show();
+            $.each(['postcode', 'street.1', 'street.2'], function(key,fieldName){
 
                 var element = registry.get(self.parentName + '.' + fieldName);
                 if (element) {
@@ -240,9 +321,10 @@ define([
                 return;
             }
 		
-            var formData = this.source.get(this.customerScope);
+            var formData = this.source.get(this.customScope);
 
             this.validateRequest();
+            this.postcodeCheckValid = null;
             this.isPostcodeCheckComplete = $.Deferred();
             this.checkRequest = getPostcodeInformation(this.isPostcodeCheckComplete,formData.experius_postcode_postcode,formData.experius_postcode_housenumber);
 
@@ -273,6 +355,7 @@ define([
                     self.updatePreview();
 
                     self.setHouseNumberAdditions(response.houseNumberAdditions);
+                    self.postcodeCheckValid = true;
                 
                 } else {
 
@@ -298,7 +381,7 @@ define([
                 var options = [];
                 $.each(additions, function(key,addition){
                     if (!addition) {
-                        options[key] = {'label':'No addition','labeltitle':'No addition','value':''};
+                        options[key] = {'label':' - ','labeltitle':' - ','value':''};
                     } else {
                         var additionStripped = addition.replace(" ", "");
                         options[key] = {'label':additionStripped,'labeltitle':additionStripped,'value':additionStripped};
@@ -316,6 +399,16 @@ define([
                 this.checkRequest = null;
             }
         },
+        validate: function() {
+            var isValid = !this.error() && this.postcodeCheckValid;
+            if (!isValid) {
+                this.source.set('params.invalid', true);
+            }
+            return {
+                valid: isValid,
+                target: this
+            };
+        },
         debug: function(message){
             if(this.getSettings().debug){
                 console.log(message);
@@ -328,7 +421,7 @@ define([
                 return;
             }
 
-            var address = this.source.get(this.customerScope);
+            var address = this.source.get(this.customScope);
 
             $.each(address.street, function(index,street){
                 preview += street + ' ';

@@ -35,10 +35,10 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 					 ['shipping-step']['children']['shippingAddress']['children']
 						 ['shipping-address-fieldset']['children'];
 
-            if(isset($shippingFields['street'])){
+            /*if(isset($shippingFields['street'])){
                 unset($shippingFields['street']['children'][1]['validation']);
                 unset($shippingFields['street']['children'][2]['validation']);
-            }
+            }*/
 
             $shippingFields = array_merge($shippingFields,$this->getPostcodeFieldSet('shippingAddress','shipping'));
 
@@ -55,7 +55,6 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 			$result = $this->getBillingFormFields($result);
 
         }
-		
         return $result;
 	}
 	
@@ -109,14 +108,15 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
                     'component' => 'Experius_Postcode/js/view/form/postcode',
                     'type' => 'group',
                     'config' => [
-                        "customerScope" => $scope,
+                        "customScope" => $scope,
                         "template" => 'Experius_Postcode/form/group',
                         "additionalClasses" => "experius_postcode_fieldset",
                         "loaderImageHref" => $this->getViewFileUrl('images/loader-1.gif')
                     ],
+                    'sortOrder' => '905',
                     'children' => $this->getPostcodeFields($scope,$addressType),
                     'provider' => 'checkoutProvider',
-                    'addressType'=> $addressType
+                    'addressType'=> $addressType,
                 ]
         ];
     }
@@ -129,7 +129,7 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 			[
 				'component' => 'Magento_Ui/js/form/element/abstract',
 				'config' => [
-					"customerScope" => $scope,
+					"customScope" => $scope,
 					"template" => 'ui/form/field',
 					"elementTmpl" => 'ui/form/element/input',
 				],
@@ -138,32 +138,31 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 				'label' => __('Postcode'),
 				'sortOrder' => '915',
 				'validation' => [
-					'required-entry' => 1,
-				],
-                'addressType'=> $addressType
+					'required-entry' => true,
+                    'min_text_length' => 6,
+				]
 			],
             'experius_postcode_housenumber'=>
 			[
 				'component' => 'Magento_Ui/js/form/element/abstract',
 				'config' => [
-					"customerScope" => $scope,
+					"customScope" => $scope,
 					"template" => 'ui/form/field',
 					"elementTmpl" => 'ui/form/element/input'
 				],
 				'provider' => 'checkoutProvider',
 				'dataScope' => $scope . '.experius_postcode_housenumber',
-				'label' => __('Housenumber'),
+				'label' => __('Housenr.'),
 				'sortOrder' => '925',
 				'validation' => [
-					'required-entry' => 1,
+					'required-entry' => true,
 				],
-                'addressType'=> $addressType
 			],
 			'experius_postcode_housenumber_addition'=>
 			[
 				'component' => 'Magento_Ui/js/form/element/select',
 				'config' => [
-					"customerScope" => $scope,
+					"customScope" => $scope,
 					"template" => 'ui/form/field',
 					"elementTmpl" => 'ui/form/element/select'
 				],
@@ -174,20 +173,14 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
 				'validation' => [
 					'required-entry' => false,
 				],
-                'options' => [
-                    [
-                        'value' => '',
-                        'label' => __('No housenumber addition'),
-                    ]
-                ],
+                'options' => [],
 				'visible' => false,
-                'addressType'=> $addressType
 			],
 			'experius_postcode_disable'=>
 			[
 				'component' => 'Magento_Ui/js/form/element/abstract',
 				'config' => [
-					"customerScope" => $scope,
+					"customScope" => $scope,
 					"template" => 'ui/form/field',
 					"elementTmpl" => 'ui/form/element/checkbox'
 				],

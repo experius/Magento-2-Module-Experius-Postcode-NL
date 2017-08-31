@@ -1,5 +1,6 @@
 Postcode,Postcode
 Housenumber,Housenumber
+"Housenr.","Housenr."
 Addition,Addition
 "Enter address manually","Enter address manually"
 "Unknown postcode + housenumber combination.","Unknown postcode + housenumber combination."
