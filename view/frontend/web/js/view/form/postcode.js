@@ -73,11 +73,13 @@ define([
         },
         observeDisableCheckbox: function (value) {
             if(value){
+                this.hideFields();
                 this.enableFields();
                 this.postcodeCheckValid = true;
                 this.notice('')
                 this.error(null)
             } else if (registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').get('visible')) {
+                this.hideFields();
                 this.postcodeCheckValid = null;
                 this.disableFields();
                 this.updatePostcode();
@@ -106,7 +108,7 @@ define([
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').set('visible', true);
                 this.updatePostcode();
             } else if(address && address.country_id=='NL' && address.experius_postcode_disable){
-                this.showFields();
+                this.hideFields();
                 this.enableFields();
                 this.postcodeCheckValid = true;
                 this.error(null)
@@ -186,7 +188,6 @@ define([
                                 elem.set('visible', false);
                             }
                         });
-                        var additionalClasses = element.get('additionalClasses');
                     }else{
                         element.set('disabled', true);
                         if (fieldName == 'postcode') {
@@ -196,13 +197,7 @@ define([
                 }
             });
 
-			var streetElement = registry.get(this.parentName + '.street').set('visible',true);
-			var additionalClasses = streetElement.get('additionalClasses');
-			                additionalClasses['experius-postcode-enabled'] = 'experius-postcode-enabled';
-			                streetElement.set('additionalClasses', additionalClasses);
-			
-
-            registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_postcode').set('visible',true);
+			registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_postcode').set('visible',true);
             registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber').set('visible',true);
 
             if(registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber_addition'))
@@ -225,19 +220,11 @@ define([
                         $.each(element.elems(), function (index, elem) {
                             elem.set('visible',true).set('labelVisible',true).set('disabled',false);
                         });
-                        var additionalClasses = element.get('additionalClasses');
-                        additionalClasses['experius-postcode-hide'] = '';
-                        element.set('additionalClasses', additionalClasses);
                     }else{
                         element.set('visible', true).set('labelVisible',true).set('disabled',false);
                     }
                 }
             });
-            
-            var streetElement = registry.get(this.parentName + '.street').set('visible',true);
-			var additionalClasses = streetElement.get('additionalClasses');
-			                additionalClasses['experius-postcode-enabled'] = '';
-			                streetElement.set('additionalClasses', additionalClasses);
 
             this.notice('');
         },
@@ -255,9 +242,6 @@ define([
                         $.each(element.elems(), function (index, elem) {
                             elem.set('visible', false).set('labelVisible', false).set('disabled', true);
                         });
-                        var additionalClasses = element.get('additionalClasses');
-                        additionalClasses['experius-postcode-hide'] = 'experius-postcode-hide';
-                        element.set('additionalClasses', additionalClasses);
                     }else{
                         element.set('visible', false).set('labelVisible', false).set('disabled', true);
                     }
@@ -266,6 +250,16 @@ define([
 
             registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_postcode').set('visible',true);
             registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber').set('visible',true);
+
+            var streetElement = registry.get(this.parentName + '.street');
+            var additionalClasses = streetElement.get('additionalClasses');
+            $.each(additionalClasses, function(className, active) {
+                if (className.indexOf('-street') >= 0) {
+                    additionalClasses["experius-postcode-enabled"] = true;
+                    streetElement.set('additionalClasses', additionalClasses);
+                    $("fieldset." + className).addClass("experius-postcode-enabled");
+                }
+            });
 
             if(registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber_addition'))
             {
@@ -287,9 +281,6 @@ define([
 		                $.each(element.elems(), function (index, elem) {
 		                    elem.set('visible',true).set('labelVisible',true).set('disabled',false);
 		                });
-		                var additionalClasses = element.get('additionalClasses');
-			                additionalClasses['experius-postcode-hide'] = '';
-			                element.set('additionalClasses', additionalClasses);
 		            }else{
                 		element.set('visible',true).set('labelVisible',true).set('disabled',false);
                 	}
@@ -303,6 +294,16 @@ define([
                 ], function(key,fieldName){
                 if (registry.get(self.parentName + '.' + fieldName)) {
                     registry.get(self.parentName + '.' + fieldName).set('visible',false);
+                }
+            });
+
+            var streetElement = registry.get(this.parentName + '.street');
+            var additionalClasses = streetElement.get('additionalClasses');
+            $.each(additionalClasses, function(className, active) {
+                if (className.indexOf('-street') >= 0) {
+                    additionalClasses["experius-postcode-enabled"] = false;
+                    streetElement.set('additionalClasses', additionalClasses);
+                    $("fieldset." + className).removeClass("experius-postcode-enabled");
                 }
             });
             
