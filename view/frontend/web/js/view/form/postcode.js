@@ -158,18 +158,7 @@ define([
                 this.emailCheckTimeout = setTimeout(function () {
                     self.getPostcodeInformation();
                 }, self.checkDelay);
-            } else {
-                if(self.getSettings().useStreet2AsHouseNumber){
-                    registry.get(self.parentName + '.street.1').set('value',formData.experius_postcode_housenumber).set('error',false);
-                    self.debug('address on two lines');
-                } else {
-                    registry.get(self.parentName + '.street.0').set('value',formData.street + ' ' + formData.experius_postcode_housenumber).set('error',false);
-                    self.debug('address on single line');
-                }
-                this.debug('postcode or housenumber not set. ' + 'housenumber:' + formData.experius_postcode_housenumber + ' postcode:' + formData.experius_postcode_postcode);
-            }
-            
-
+	    }
         },
 
         disableFields: function(){
