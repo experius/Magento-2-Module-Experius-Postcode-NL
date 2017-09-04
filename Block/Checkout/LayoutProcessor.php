@@ -176,6 +176,24 @@ class LayoutProcessor extends \Magento\Framework\View\Element\AbstractBlock impl
                 'options' => [],
 				'visible' => false,
 			],
+            'experius_postcode_housenumber_addition_manual'=>
+                [
+                    'component' => 'Magento_Ui/js/form/element/abstract',
+                    'config' => [
+                        "customScope" => $scope,
+                        "template" => 'ui/form/field',
+                        "elementTmpl" => 'ui/form/element/input'
+                    ],
+                    'provider' => 'checkoutProvider',
+                    'dataScope' => $scope . '.experius_postcode_housenumber_addition_manual',
+                    'label' => __('Addition'),
+                    'sortOrder' => '927',
+                    'validation' => [
+                        'required-entry' => false,
+                    ],
+                    'options' => [],
+                    'visible' => false,
+                ],
 			'experius_postcode_disable'=>
 			[
 				'component' => 'Magento_Ui/js/form/element/abstract',
