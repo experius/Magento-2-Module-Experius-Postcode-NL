@@ -1,6 +1,6 @@
 define([
     "jquery"
-], function($) {
+], function ($) {
 
     $.widget('experius.postcode', {
         options: {
@@ -14,8 +14,8 @@ define([
                 "%inputHtml%" +
                 "</div>" +
                 "</div> ",
-            addFields : {},
-            hideFields : {},
+            addFields: {},
+            hideFields: {},
             showFields: {}
         },
 
@@ -23,37 +23,37 @@ define([
             this._initObservers();
         },
 
-        _initObservers: function(){
+        _initObservers: function () {
             this._addFields();
             this._hideFields();
         },
 
-        _addFields: function(){
+        _addFields: function () {
 
             var fieldset = 'test';
 
             $('div.field.street').before(fieldset);
         },
 
-        _hideFields: function(){
+        _hideFields: function () {
             $('div.field.street').hide();
             $('div.field.city').hide();
             $('div.field.region').hide();
         },
 
-        _showFields: function(){
+        _showFields: function () {
 
         },
 
-        _save: function(observerData){
+        _save: function (observerData) {
 
             var self = this;
 
-            this._loader(observerData.reload,'show');
-            
+            this._loader(observerData.reload, 'show');
+
             var data = {};
-            
-            if(this.ajax) {
+
+            if (this.ajax) {
                 this.ajax.abort();
             }
 
@@ -61,15 +61,15 @@ define([
                 type: "POST",
                 url: this.options.url,
                 data: data,
-                success: function(response){
+                success: function (response) {
                     console.log(response);
 
-                    if(observerData.reload!==undefined) {
+                    if (observerData.reload !== undefined) {
                         self._updateContent(response.content);
                     }
 
-                    if(observerData.redirect!==undefined) {
-                        window.location.href=observerData.redirect;
+                    if (observerData.redirect !== undefined) {
+                        window.location.href = observerData.redirect;
                     }
 
                     self._loader(observerData.reload, 'hide');
@@ -78,18 +78,18 @@ define([
 
         },
 
-        _updateContent: function(content){
+        _updateContent: function (content) {
 
         },
 
-        _loader: function(selectors,action){
+        _loader: function (selectors, action) {
             var loaderClassName = 'experius-postcode-loader';
-            $.each(selectors, function(index,selector){
-                var element =  $('#' + selector);
-                if(action=='show'){
-                    element.append('<div class="'+loaderClassName+'">reloading</div>');
+            $.each(selectors, function (index, selector) {
+                var element = $('#' + selector);
+                if (action == 'show') {
+                    element.append('<div class="' + loaderClassName + '">reloading</div>');
                 } else {
-                    element.find('.'+loaderClassName).remove();
+                    element.find('.' + loaderClassName).remove();
                 }
             });
         },
