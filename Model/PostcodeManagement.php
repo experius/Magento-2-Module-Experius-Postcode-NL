@@ -12,6 +12,8 @@
 
 namespace Experius\Postcode\Model;
 
+use Experius\Postcode\Helper\Data as HelperData;
+
 /**
  * Class PostcodeManagement
  * @package Experius\Postcode\Model
@@ -29,7 +31,7 @@ class PostcodeManagement
      * @param \Experius\Postcode\Helper\Data $postcodeHelper Postcode helper.
      */
     public function __construct(
-        \Experius\Postcode\Helper\Data $postcodeHelper
+        HelperData $postcodeHelper
     ) {
         $this->postcodeHelper = $postcodeHelper;
     }
