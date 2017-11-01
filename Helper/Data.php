@@ -172,47 +172,54 @@ class Data extends AbstractHelper
         if ($this->httpResponseCode == 200 && is_array($jsonData) && isset($jsonData['postcode'])) {
             $response = array_merge($response, $jsonData);
         } else {
-            if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
-                if ($this->httpResponseCode == 400 || $this->httpResponseCode == 404) {
-                    switch ($jsonData['exceptionId']) {
-                        case 'PostcodeNl_Controller_Address_PostcodeTooShortException':
-                        case 'PostcodeNl_Controller_Address_PostcodeTooLongException':
-                        case 'PostcodeNl_Controller_Address_NoPostcodeSpecifiedException':
-                        case 'PostcodeNl_Controller_Address_InvalidPostcodeException':
-                            $response['message'] = __('Invalid postcode format, use `1234AB` format.');
-                            $response['messageTarget'] = 'postcode';
-                            break;
-                        case 'PostcodeNl_Service_PostcodeAddress_AddressNotFoundException':
-                            $response['message'] = __('Unknown postcode + housenumber combination.');
-                            $response['messageTarget'] = 'housenumber';
-                            break;
-                        case 'PostcodeNl_Controller_Address_InvalidHouseNumberException':
-                        case 'PostcodeNl_Controller_Address_NoHouseNumberSpecifiedException':
-                        case 'PostcodeNl_Controller_Address_NegativeHouseNumberException':
-                        case 'PostcodeNl_Controller_Address_HouseNumberTooLargeException':
-                        case 'PostcodeNl_Controller_Address_HouseNumberIsNotAnIntegerException':
-                            $response['message'] = __('Housenumber format is not valid.');
-                            $response['messageTarget'] = 'housenumber';
-                            break;
-                        default:
-                            $response['message'] = __('Incorrect address.');
-                            $response['messageTarget'] = 'housenumber';
-                            break;
-                    }
-                } else {
-                    if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
-                        $response['message'] = __('Validation error, please use manual input.');
-                        $response['messageTarget'] = 'housenumber';
-                        $response['useManual'] = true;
-                    }
-                }
-            } else {
-                $response['message'] = __('Validation unavailable, please use manual input.');
-                $response['messageTarget'] = 'housenumber';
-                $response['useManual'] = true;
-            }
+            $response = $this->processErrorMessage($jsonData, $response);
         }
 
+        return $response;
+    }
+
+    protected function processErrorMessage($jsonData, $response)
+    {
+        if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
+            if ($this->httpResponseCode == 400 || $this->httpResponseCode == 404) {
+                if (in_array($jsonData['exceptionId'], [
+                    'PostcodeNl_Controller_Address_PostcodeTooShortException',
+                    'PostcodeNl_Controller_Address_PostcodeTooLongException',
+                    'PostcodeNl_Controller_Address_NoPostcodeSpecifiedException',
+                    'PostcodeNl_Controller_Address_InvalidPostcodeException',
+                ])) {
+                    $response['message'] = __('Invalid postcode format, use `1234AB` format.');
+                    $response['messageTarget'] = 'postcode';
+                } elseif (in_array($jsonData['exceptionId'], [
+                    'PostcodeNl_Service_PostcodeAddress_AddressNotFoundException',
+                ])) {
+                    $response['message'] = __('Unknown postcode + housenumber combination.');
+                    $response['messageTarget'] = 'housenumber';
+                } elseif (in_array($jsonData['exceptionId'], [
+                    'PostcodeNl_Controller_Address_InvalidHouseNumberException',
+                    'PostcodeNl_Controller_Address_NoHouseNumberSpecifiedException',
+                    'PostcodeNl_Controller_Address_NegativeHouseNumberException',
+                    'PostcodeNl_Controller_Address_HouseNumberTooLargeException',
+                    'PostcodeNl_Controller_Address_HouseNumberIsNotAnIntegerException',
+                ])) {
+                    $response['message'] = __('Housenumber format is not valid.');
+                    $response['messageTarget'] = 'housenumber';
+                } else {
+                    $response['message'] = __('Incorrect address.');
+                    $response['messageTarget'] = 'housenumber';
+                }
+            } else {
+                if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
+                    $response['message'] = __('Validation error, please use manual input.');
+                    $response['messageTarget'] = 'housenumber';
+                    $response['useManual'] = true;
+                }
+            }
+        } else {
+            $response['message'] = __('Validation unavailable, please use manual input.');
+            $response['messageTarget'] = 'housenumber';
+            $response['useManual'] = true;
+        }
         return $response;
     }
 
@@ -275,36 +282,7 @@ class Data extends AbstractHelper
                 // We have a HTTP connection error
                 $message = __('Your server could not connect to the Postcode.nl server.');
 
-                // Do some common SSL CA problem detection
-                if (strpos(
-                    $addressData['debugInfo']['httpClientError'],
-                    'SSL certificate problem, verify that the CA cert is OK'
-                ) !== false) {
-                    $info[] = __('Your servers\' \'cURL SSL CA bundle\' is missing or outdated. Further information:');
-                    $info[] = '- <a href="https://stackoverflow.com/questions/6400300/https-and-ssl3-get-server-'.
-                        'certificatecertificate-verify-failed-ca-is-ok" target="_blank">'.
-                        __('How to update/fix your CA cert bundle') . '</a>';
-                    $info[] = '- <a href="https://curl.haxx.se/docs/sslcerts.html" target="_blank">'.
-                        __('About cURL SSL CA certificates') . '</a>';
-                    $info[] = '';
-                } else {
-                    if (strpos(
-                        $addressData['debugInfo']['httpClientError'],
-                        'unable to get local issuer certificate'
-                    ) !== false) {
-                        $info[] = __('cURL cannot read/access the CA cert file:');
-                        $info[] = '- <a href="https://curl.haxx.se/docs/sslcerts.html" target="_blank">'.
-                        __('About cURL SSL CA certificates') . '</a>';
-                        $info[] = '';
-                    } else {
-                        $info[] = __('Connection error.');
-                    }
-                }
-                $info[] = __('Error message:') . ' "' . $addressData['debugInfo']['httpClientError'] . '"';
-                $info[] = '- <a href="https://www.google.com/search?q='.
-                    urlencode($addressData['debugInfo']['httpClientError']).
-                    '" target="_blank">' . __('Google the error message') . '</a>';
-                $info[] = '- ' . __('Contact your hosting provider if problems persist.');
+                $info = $this->processHttpClientErrorInfo($addressData, $info);
             } else {
                 if (!is_array($addressData['debugInfo']['parsedResponse'])) {
                     // We have not received a valid JSON response
@@ -362,6 +340,41 @@ class Data extends AbstractHelper
             'status' => $status,
             'info' => $info,
         );
+    }
+
+    protected function processHttpClientErrorInfo($addressData, $info)
+    {
+        // Do some common SSL CA problem detection
+        if (strpos(
+            $addressData['debugInfo']['httpClientError'],
+            'SSL certificate problem, verify that the CA cert is OK'
+        ) !== false) {
+            $info[] = __('Your servers\' \'cURL SSL CA bundle\' is missing or outdated. Further information:');
+            $info[] = '- <a href="https://stackoverflow.com/questions/6400300/https-and-ssl3-get-server-'.
+                'certificatecertificate-verify-failed-ca-is-ok" target="_blank">'.
+                __('How to update/fix your CA cert bundle') . '</a>';
+            $info[] = '- <a href="https://curl.haxx.se/docs/sslcerts.html" target="_blank">'.
+                __('About cURL SSL CA certificates') . '</a>';
+            $info[] = '';
+        } else {
+            if (strpos(
+                $addressData['debugInfo']['httpClientError'],
+                'unable to get local issuer certificate'
+            ) !== false) {
+                $info[] = __('cURL cannot read/access the CA cert file:');
+                $info[] = '- <a href="https://curl.haxx.se/docs/sslcerts.html" target="_blank">'.
+                    __('About cURL SSL CA certificates') . '</a>';
+                $info[] = '';
+            } else {
+                $info[] = __('Connection error.');
+            }
+        }
+        $info[] = __('Error message:') . ' "' . $addressData['debugInfo']['httpClientError'] . '"';
+        $info[] = '- <a href="https://www.google.com/search?q='.
+            urlencode($addressData['debugInfo']['httpClientError']).
+            '" target="_blank">' . __('Google the error message') . '</a>';
+        $info[] = '- ' . __('Contact your hosting provider if problems persist.');
+        return $info;
     }
 
     protected function getStoreConfig($path)
