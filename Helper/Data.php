@@ -14,10 +14,7 @@ namespace Experius\Postcode\Helper;
 
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
-use /** @noinspection PhpUndefinedClassInspection */
-    Psr\Log\LoggerInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Module\ModuleListInterface;
 
@@ -41,10 +38,6 @@ class Data extends AbstractHelper
     protected $httpClientError = null;
     protected $debuggingOverride = false;
 
-    protected $scopeConfig;
-
-    protected $logger;
-
     protected $productMetadataInterface;
 
     protected $moduleList;
@@ -52,15 +45,11 @@ class Data extends AbstractHelper
     protected $developerHelper;
 
     public function __construct(
-        /** @noinspection PhpUndefinedClassInspection */ LoggerInterface $logger,
-        ScopeConfigInterface $scopeConfig,
         ProductMetadataInterface $productMetadataInterface,
         ModuleListInterface $moduleList,
         \Magento\Developer\Helper\Data $developerHelper,
         Context $context
     ) {
-        $this->logger = $logger;
-        $this->scopeConfig = $scopeConfig;
         $this->productMetadataInterface = $productMetadataInterface;
         $this->moduleList = $moduleList;
         $this->developerHelper = $developerHelper;
