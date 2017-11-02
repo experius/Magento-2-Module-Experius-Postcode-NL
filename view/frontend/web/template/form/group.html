@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<fieldset id="experius-postcode-fieldset" class="fieldset" data-bind="css: additionalClasses, visible: visible" data-bind="blockLoader: isLoading">
+<fieldset id="experius-postcode-fieldset" class="fieldset" data-bind="css: additionalClasses, visible: visible"
+          data-bind="blockLoader: isLoading">
     <!-- ko foreach: { data: elems, as: 'element' } -->
 
     <!-- ko if: element.visible() -->
@@ -30,7 +31,8 @@
     <!-- /ko -->
 
     <!-- ko if: element.notice -->
-    <div class="field-note" data-bind="attr: { id: element.noticeId }"><span data-bind="html: element.notice"></span></div>
+    <div class="field-note" data-bind="attr: { id: element.noticeId }"><span data-bind="html: element.notice"></span>
+    </div>
     <!-- /ko -->
 
     <!-- ko if: element.error() -->

@@ -6,20 +6,21 @@ define(
     ],
     function ($, storage, urlBuilder) {
         'use strict';
-        
+
         return function (deferred, postcode, housenumber) {
             var serviceUrl, payload;
 
-            serviceUrl = urlBuilder.createUrl('/postcode/information',{});
-            
+            serviceUrl = urlBuilder.createUrl('/postcode/information', {});
+
             payload = {
                 postcode: postcode,
                 houseNumber: housenumber,
                 houseNumberAddition: ''
             };
 
-            return storage.post(                
-                serviceUrl,JSON.stringify(payload)
+            return storage.post(
+                serviceUrl,
+                JSON.stringify(payload)
             ).done(
                 function (postcodeInformation) {
                     if (postcodeInformation) {
