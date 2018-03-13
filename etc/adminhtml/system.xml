@@ -23,27 +23,27 @@
 			</group>
 			<group id="advanced_config" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
 				<label>Advanced Configuration</label>
-				<field id="use_street2_as_housenumber" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="select">
+				<field id="use_street2_as_housenumber" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="select" canRestore="1">
 					<label>Use street 2 for housenumber</label>
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
-				<field id="use_street3_as_housenumber_addition" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select">
+				<field id="use_street3_as_housenumber_addition" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select" canRestore="1">
 					<label>Use street 3 for housenumber addition</label>
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
-				<field id="never_hide_country" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select">
+				<field id="never_hide_country" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select" canRestore="1">
 					<label>Always show country selector</label>
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
-				<field id="change_sort_order" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select">
+				<field id="change_sort_order" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select" canRestore="1">
 					<label>Adjust address fields sort order in checkout</label>
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
-				<field id="api_debug" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="label" type="select">
+				<field id="api_debug" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="label" type="select" canRestore="1">
 					<label>Debug</label>
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
