@@ -173,6 +173,13 @@ define([
                     self.debug('address on single line');
                 }
                 registry.get(self.parentName + '.postcode').set('value',formData.experius_postcode_postcode).set('error',false);
+                if (
+                        typeof registry.get(self.parentName + '.street.0').get('value') == 'object' ||
+                        registry.get(self.parentName + '.street.0').get('value') == '[object Object] '
+                ) {
+                    this.debug('Fixing street.0 as it contains [object Object]');
+                    registry.get(self.parentName + '.street.0').set('value', '').set('error', false);
+                }
                 this.debug('postcode or housenumber not set. ' + 'housenumber:' + formData.experius_postcode_housenumber + ' postcode:' + formData.experius_postcode_postcode);
             }
 
