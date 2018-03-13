@@ -16,17 +16,25 @@
         margin-bottom: 0px;
         position: relative;
 
+        > strong {
+            display: block;
+        }
+
+        > .field:not(.choice) > .label {
+            width: auto;
+        }
+
         .field {
             float: left;
             padding-right: 20px;
 
             &[name*='experius_postcode_postcode'] {
-                width: 110px;
+                width: 125px;
             }
 
             &[name*='experius_postcode_housenumber'],
             &[name*='experius_postcode_housenumber_addition'] {
-                width: 90px;
+                width: 100px;
             }
 
             &[name*='experius_postcode_disable'] {
@@ -59,5 +67,15 @@
 
     .experius-postcode-hide {
         display: none;
+    }
+}
+
+//
+//  Tablet and up
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    #experius-postcode-fieldset {
+        margin-left: 25.8%;
     }
 }
