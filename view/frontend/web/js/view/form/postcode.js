@@ -245,6 +245,12 @@ define([
                     }
                 }
             });
+            
+            if (!this.getSettings().useStreet2AsHouseNumber) {
+                registry.async(self.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber')(function () {
+                    registry.get(self.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber').set('visible', false);
+                });
+            }
 
             this.notice('');
         },
