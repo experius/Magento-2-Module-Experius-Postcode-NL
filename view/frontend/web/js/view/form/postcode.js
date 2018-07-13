@@ -169,17 +169,11 @@ define([
                     registry.get(self.parentName + '.street.1').set('value', formData.experius_postcode_housenumber).set('error', false);
                     self.debug('address on two lines');
                 } else {
-                    registry.get(self.parentName + '.street.0').set('value', formData.street + ' ' + formData.experius_postcode_housenumber).set('error', false);
+                    registry.get(self.parentName + '.street.0').set('value', formData.street[0] + ' ' + formData.experius_postcode_housenumber).set('error', false);
                     self.debug('address on single line');
                 }
                 registry.get(self.parentName + '.postcode').set('value',formData.experius_postcode_postcode).set('error',false);
-                if (
-                        typeof registry.get(self.parentName + '.street.0').get('value') == 'object' ||
-                        registry.get(self.parentName + '.street.0').get('value') == '[object Object] '
-                ) {
-                    this.debug('Fixing street.0 as it contains [object Object]');
-                    registry.get(self.parentName + '.street.0').set('value', '').set('error', false);
-                }
+                
                 this.debug('postcode or housenumber not set. ' + 'housenumber:' + formData.experius_postcode_housenumber + ' postcode:' + formData.experius_postcode_postcode);
             }
 
