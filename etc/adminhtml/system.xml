@@ -24,12 +24,12 @@
 			<group id="advanced_config" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
 				<label>Advanced Configuration</label>
 				<field id="use_street2_as_housenumber" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="select" canRestore="1">
-					<label>Use street 2 for housenumber</label>
+					<label>Seperate housenumber to next street field</label>
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
 				<field id="use_street3_as_housenumber_addition" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select" canRestore="1">
-					<label>Use street 3 for housenumber addition</label>
+					<label>Seperate housenumber addition to next street field</label>
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
