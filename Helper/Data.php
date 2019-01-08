@@ -170,6 +170,7 @@ class Data extends AbstractHelper
     protected function processErrorMessage($jsonData, $response)
     {
         if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
+
             if ($this->httpResponseCode == 400 || $this->httpResponseCode == 404) {
                 if (in_array($jsonData['exceptionId'], [
                     'PostcodeNl_Controller_Address_PostcodeTooShortException',
@@ -197,6 +198,10 @@ class Data extends AbstractHelper
                     $response['message'] = __('Incorrect address.');
                     $response['messageTarget'] = 'housenumber';
                 }
+            } elseif ($this->httpResponseCode == 401)
+            {
+                $response['message'] = __('Postcode service unavailable, please use manual input');
+                $response['messageTarget'] = 'housenumber';
             } else {
                 if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
                     $response['message'] = __('Validation error, please use manual input.');
