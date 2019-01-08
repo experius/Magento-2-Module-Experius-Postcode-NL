@@ -81,6 +81,14 @@ define([
                 this.notice('')
                 this.error(null)
                 this.toggleHousenumberAdditionFields(this.getAddressData());
+                var formData = this.source.get(this.customScope);
+                if (formData.experius_postcode_housenumber) {
+                    if (this.getSettings().useStreet2AsHouseNumber) {
+                        registry.get(this.parentName + '.street.1').set('value', formData.experius_postcode_housenumber).set('error', false);
+                    } else {
+                        registry.get(this.parentName + '.street.0').set('value', formData.street + ' ' + formData.experius_postcode_housenumber).set('error', false);
+                    }
+                }
             } else if (registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').get('visible')) {
                 this.hideFields();
                 this.postcodeCheckValid = null;
