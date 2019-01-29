@@ -19,8 +19,7 @@ class Apicheck extends \Magento\Framework\App\Action\Action
         $newApiKey = $params['apikey'];
         $newApiSecret = $params['apisecret'];
         $access = json_decode($this->checkApiKey($newApiKey, $newApiSecret));
-        if (property_exists($access, 'exception'))
-        {
+        if (property_exists($access, 'exception')) {
             $result['message'] = __('Key or secret are invalid');
             $result['key_is_valid'] = 'no';
         } else {
