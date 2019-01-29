@@ -1,0 +1,32 @@
+<?php /* @var $block \Experius\Postcode\Block\System\Config\Checker */ ?>
+    <script>
+        require([
+            'jquery',
+            'prototype',
+        ], function (jQuery) {
+
+            function apicheck() {
+                var params = {  
+                    apikey :    jQuery("#postcodenl_api_general_api_key").val(),
+                    apisecret : jQuery("#postcodenl_api_general_api_secret").val()
+                };
+                new Ajax.Request('<?php echo $block->getAjaxUrl() ?>', {
+                    loaderArea: true,
+                    asynchronous: true,
+                    parameters: params,
+                    onSuccess: function (jsonresponse) {
+                        var response = JSON.parse(jsonresponse.responseText)
+                        jQuery(".api_key_is_valid").text(response.message)
+                        jQuery("#postcodenl_api_general_api_key_is_valid").val(response.key_is_valid)
+                    }
+                })
+            }
+            jQuery('#check_button').click(function (event) {
+                event.preventDefault();
+                apicheck()
+            });
+        });
+    </script>
+<?php echo $block->getButtonHtml() ?>
+<span class="api_key_is_valid">
+</span>
