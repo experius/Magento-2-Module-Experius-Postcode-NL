@@ -19,7 +19,7 @@ class Checker extends Field
     public function __construct(
         Context $context,
         array $data = []
-        ) {
+    ) {
         parent::__construct($context, $data);
     }
 
