@@ -7,10 +7,23 @@ class Apicheck extends \Magento\Framework\App\Action\Action
     const API_URL = 'https://api.postcode.eu';
     const API_TIMEOUT = 3;
 
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * Apicheck constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
-         parent::__construct($context);
+        $this->resultJsonFactory = $resultJsonFactory;
+
+        parent::__construct($context);
     }
 
     public function execute()
@@ -31,7 +44,8 @@ class Apicheck extends \Magento\Framework\App\Action\Action
                 $result['key_is_valid'] = 'no';
             }
         }
-        echo json_encode($result);
+
+        return $this->resultJsonFactory->create()->setData($result);
     }
 
     private function checkApiKey($newApiKey, $newApiSecret)
