@@ -76,7 +76,6 @@ class Data extends AbstractHelper
         );
         $neverHideCountry = $this->getConfigBoolString('postcodenl_api/advanced_config/never_hide_country');
         $settings = [
-            //"baseUrl"=> htmlspecialchars($baseUrl),
             "useStreet2AsHouseNumber" => (boolean)$useStreet2AsHousenumber,
             "useStreet3AsHouseNumberAddition" => $useStreet3AsHousenumberAddition,
             "neverHideCountry" => $neverHideCountry,
@@ -100,7 +99,7 @@ class Data extends AbstractHelper
             return true;
         }
 
-        return (bool)$this->getStoreConfig('postcodenl_api/advanced_config/api_debug') &&
+        return (bool) $this->getStoreConfig('postcodenl_api/advanced_config/api_debug') &&
             $this->developerHelper->isDevAllowed();
     }
 
@@ -131,7 +130,7 @@ class Data extends AbstractHelper
             return $message;
         }
 
-        $response = array();
+        $response = [];
 
         // Some basic user data 'fixing', remove any not-letter, not-number characters
         $postcode = preg_replace('~[^a-z0-9]~i', '', $postcode);
@@ -170,6 +169,7 @@ class Data extends AbstractHelper
     protected function processErrorMessage($jsonData, $response)
     {
         if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
+
             if ($this->httpResponseCode == 400 || $this->httpResponseCode == 404) {
                 if (in_array($jsonData['exceptionId'], [
                     'PostcodeNl_Controller_Address_PostcodeTooShortException',
@@ -197,6 +197,9 @@ class Data extends AbstractHelper
                     $response['message'] = __('Incorrect address.');
                     $response['messageTarget'] = 'housenumber';
                 }
+            } elseif ($this->httpResponseCode == 401) {
+                $response['message'] = __('Postcode service unavailable, please use manual input');
+                $response['messageTarget'] = 'housenumber';
             } else {
                 if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
                     $response['message'] = __('Validation error, please use manual input.');
@@ -227,24 +230,24 @@ class Data extends AbstractHelper
 
     protected function getDebugInfo($url, $jsonData)
     {
-        return array(
+        return [
             'requestUrl' => $url,
             'rawResponse' => $this->httpResponseRaw,
             'responseCode' => $this->httpResponseCode,
             'responseCodeClass' => $this->httpResponseCodeClass,
             'parsedResponse' => $jsonData,
             'httpClientError' => $this->httpClientError,
-            'configuration' => array(
+            'configuration' => [
                 'url' => $this->getServiceUrl(),
                 'key' => $this->getKey(),
                 'secret' => substr($this->getSecret(), 0, 6) . '[hidden]',
                 'showcase' => $this->getStoreConfig('postcodenl_api/advanced_config/api_showcase'),
                 'debug' => $this->getStoreConfig('postcodenl_api/advanced_config/api_debug'),
-            ),
+            ],
             'magentoVersion' => $this->getMagentoVersion(),
             'extensionVersion' => $this->getExtensionVersion(),
             'modules' => $this->getMagentoModules(),
-        );
+        ];
     }
 
     public function testConnection()
@@ -253,7 +256,7 @@ class Data extends AbstractHelper
         /** @noinspection PhpUnusedLocalVariableInspection */
         $message = __('The test connection could not be successfully completed.');
         $status = 'error';
-        $info = array();
+        $info = [];
 
         // Do a test address lookup
         $this->setDebuggingOverride(true);
@@ -282,8 +285,7 @@ class Data extends AbstractHelper
                     $info[] = '- ' . __('Technical reason: No valid JSON was returned by the request.');
                 } else {
                     if (is_array($addressData['debugInfo']['parsedResponse'])
-                        && isset($addressData['debugInfo']['parsedResponse']['exceptionId'])
-                    ) {
+                        && isset($addressData['debugInfo']['parsedResponse']['exceptionId'])) {
                         // We have an exception message from the service itself
 
                         if ($addressData['debugInfo']['responseCode'] == 401) {
@@ -313,7 +315,7 @@ class Data extends AbstractHelper
 
                             $message = __('The response from the Postcode.nl service could not be understood.');
                             $info[] = '- ' . __('The service might be temporarily unavailable, if problems persist, '.
-                                    'please contact <a href=\'mailto:info@postcode.nl\'>info@postcode.nl</a>.');
+                                'please contact <a href=\'mailto:info@postcode.nl\'>info@postcode.nl</a>.');
                             $info[] = '- ' . __('Technical reason: Received JSON data did not contain expected data.');
                         } else {
                             $message = __('A test connection to the API was successfully completed.');
@@ -437,14 +439,14 @@ class Data extends AbstractHelper
                 || $this->getStoreConfig('postcodenl_api/advanced_config/admin_validation_enabled')
             )
         ) {
-            return array('message' => __('Postcode.nl API not enabled.'));
+            return ['message' => __('Postcode.nl API not enabled.')];
         }
 
         if ($this->getServiceUrl() === '' || $this->getKey() === '' || $this->getSecret() === '') {
-            return array(
+            return [
                 'message' => __('Postcode.nl API not configured.'),
-                'info' => array(__('Configure your `API key` and `API secret`.'))
-            );
+                'info' => [__('Configure your `API key` and `API secret`.')]
+            ];
         }
 
         return $this->checkCapabilities();
@@ -454,9 +456,9 @@ class Data extends AbstractHelper
     {
         // Check for SSL support in CURL
         if (!$this->curlHasSsl()) {
-            return array(
+            return [
                 'message' => __('Cannot connect to Postcode.nl API: Server is missing SSL (https) support for CURL.')
-            );
+            ];
         }
 
         return false;
@@ -474,7 +476,7 @@ class Data extends AbstractHelper
 
         $this->httpResponseRaw = curl_exec($ch);
         $this->httpResponseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $this->httpResponseCodeClass = (int)floor($this->httpResponseCode / 100) * 100;
+        $this->httpResponseCodeClass = (int) floor($this->httpResponseCode / 100) * 100;
         $curlErrno = curl_errno($ch);
         $this->httpClientError = $curlErrno ? sprintf('cURL error %s: %s', $curlErrno, curl_error($ch)) : null;
 
@@ -486,7 +488,7 @@ class Data extends AbstractHelper
     protected function getExtensionVersion()
     {
         $extensionInfo = $this->getModuleInfo('PostcodeNl_Api');
-        return $extensionInfo ? (string)$extensionInfo['version'] : 'unknown';
+        return $extensionInfo ? (string) $extensionInfo['version'] : 'unknown';
     }
 
     protected function getUserAgent()
@@ -501,13 +503,13 @@ class Data extends AbstractHelper
             return $this->modules;
         }
 
-        $this->modules = array();
+        $this->modules = [];
 
         foreach ($this->moduleList->getAll() as $name => $module) {
-            $this->modules[$name] = array();
+            $this->modules[$name] = [];
             foreach ($module as $key => $value) {
-                if (in_array((string)$key, array('setup_version', 'name'))) {
-                    $this->modules[$name][$key] = (string)$value;
+                if (in_array((string) $key, ['setup_version', 'name'])) {
+                    $this->modules[$name][$key] = (string) $value;
                 }
             }
         }

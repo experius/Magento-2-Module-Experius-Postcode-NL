@@ -40,6 +40,7 @@ define([
                 return;
             }
         },
+
         initialize: function () {
             this._super()
                 ._setClasses();
@@ -51,6 +52,7 @@ define([
 
             return this;
         },
+
         initObservable: function () {
             var rules = this.validation = this.validation || {};
 
@@ -64,11 +66,13 @@ define([
 
             return this;
         },
+
         observeCountry: function (value) {
             if (value) {
                 this.toggleFieldsByCountry(this.getAddressData());
             }
         },
+
         observeDisableCheckbox: function (value) {
             if (value) {
                 this.hideFields();
@@ -77,6 +81,14 @@ define([
                 this.notice('')
                 this.error(null)
                 this.toggleHousenumberAdditionFields(this.getAddressData());
+                var formData = this.source.get(this.customScope);
+                if (formData.experius_postcode_housenumber) {
+                    if (this.getSettings().useStreet2AsHouseNumber) {
+                        registry.get(this.parentName + '.street.1').set('value', formData.experius_postcode_housenumber).set('error', false);
+                    } else {
+                        registry.get(this.parentName + '.street.0').set('value', formData.street + ' ' + formData.experius_postcode_housenumber).set('error', false);
+                    }
+                }
             } else if (registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').get('visible')) {
                 this.hideFields();
                 this.postcodeCheckValid = null;
@@ -85,23 +97,28 @@ define([
                 this.toggleHousenumberAdditionFields(this.getAddressData());
             }
         },
+
         observePostcodeField: function (value) {
             if (value) {
                 this.updatePostcode();
             }
         },
+
         observeHousenumberField: function (value) {
             if (value) {
                 this.updatePostcode();
             }
         },
+
         observeAdditionDropdown: function (value) {
             this.observeAdditionManual(value);
         },
+
         observeAdditionManual: function (value) {
             this.postcodeHouseNumberAdditionHasChanged(value);
             this.updatePreview();
         },
+
         toggleFieldsByCountry: function (address) {
             if (address && address.country_id == 'NL' && !address.experius_postcode_disable) {
                 this.hideFields();
@@ -128,6 +145,7 @@ define([
             }
             this.toggleHousenumberAdditionFields(address);
         },
+
         updatePostcode: function () {
             var self = this;
             if (self.timeout != undefined) {
@@ -137,8 +155,8 @@ define([
                 self.postcodeHasChanged();
             }, self.checkDelay);
         },
-        postcodeHasChanged: function () {
 
+        postcodeHasChanged: function () {
             var self = this;
 
             if (!this.source) {
@@ -173,15 +191,11 @@ define([
                     self.debug('address on single line');
                 }
                 registry.get(self.parentName + '.postcode').set('value',formData.experius_postcode_postcode).set('error',false);
-                
                 this.debug('postcode or housenumber not set. ' + 'housenumber:' + formData.experius_postcode_housenumber + ' postcode:' + formData.experius_postcode_postcode);
             }
-
-
         },
 
         disableFields: function () {
-
             this.debug('hide magento default fields');
 
             var self = this;
@@ -244,7 +258,6 @@ define([
         },
 
         hideFields: function () {
-
             this.debug('hide magento default fields');
 
             var self = this;
@@ -279,8 +292,6 @@ define([
                     }
                 });
             });
-
-
         },
 
         toggleHousenumberAdditionFields: function (address) {
@@ -352,10 +363,12 @@ define([
 
             this.notice('');
         },
+
         getSettings: function () {
             var settings = window.checkoutConfig.experius_postcode.settings;
             return settings;
         },
+
         getPostcodeInformation: function () {
 
             var self = this;
@@ -411,12 +424,10 @@ define([
             }).fail(function () {
                 // fail
             }).always(function () {
-
             });
-
         },
-        setHouseNumberAdditions: function (additions) {
 
+        setHouseNumberAdditions: function (additions) {
             if (registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber_addition') && additions.length > 1 && !registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').get('value')) {
                 var previousValue = registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber_addition').value();
                 var options = [];
@@ -440,12 +451,14 @@ define([
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber_addition').value('');
             }
         },
+
         validateRequest: function () {
             if (this.checkRequest != null && $.inArray(this.checkRequest.readyState, [1, 2, 3])) {
                 this.checkRequest.abort();
                 this.checkRequest = null;
             }
         },
+
         validate: function () {
             var isValid = !this.error() && this.postcodeCheckValid;
             if (!isValid) {
@@ -456,11 +469,13 @@ define([
                 target: this
             };
         },
+
         debug: function (message) {
             if (this.getSettings().debug) {
                 console.log(message);
             }
         },
+
         updatePreview: function () {
             var preview = '<i>';
 
@@ -480,6 +495,7 @@ define([
 
             this.notice(preview);
         },
+
         postcodeHouseNumberAdditionHasChanged: function (newValue) {
 
             var current_street_value = false;
@@ -489,26 +505,32 @@ define([
                 return;
             }
 
-            var parentPartentName = this.parentName;
+            var parentParentName = this.parentName;
 
-            /* Needs refactoring */
-            if (this.getSettings().useStreet2AsHouseNumber && registry.get(parentPartentName + '.street.1') && registry.get(parentPartentName + '.street.1').get('value')) {
-                current_street_value = this.removeOldAdditionFromString(registry.get(parentPartentName + '.street.1').get('value'));
-                addition = (newValue) ? ' ' + newValue : '';
-                new_street_value = current_street_value + addition;
-                registry.get(parentPartentName + '.street.1').set('value', new_street_value);
-            } else if (this.getSettings().useStreet3AsHouseNumberAddition && registry.get(parentPartentName + '.street.2')) {
-                registry.get(parentPartentName + '.street.2').set('value', newValue);
-            } else if (registry.get(parentPartentName + '.street.0') && registry.get(parentPartentName + '.street.0').get('value')) {
-                current_street_value = this.removeOldAdditionFromString(registry.get(parentPartentName + '.street.0').get('value'));
-                addition = (newValue) ? ' ' + newValue : '';
-                new_street_value = current_street_value + addition;
-                registry.get(parentPartentName + '.street.0').set('value', new_street_value);
+            if (this.getSettings().useStreet3AsHouseNumberAddition) {
+                if (this.getSettings().useStreet2AsHouseNumber && registry.get(parentParentName + '.street.2')) {
+                    registry.get(parentParentName + '.street.2').set('value', newValue);
+                } else if (!this.getSettings().useStreet2AsHouseNumber && registry.get(parentParentName + '.street.1')) {
+                    registry.get(parentParentName + '.street.1').set('value', newValue);
+                }
+            } else {
+                if (this.getSettings().useStreet2AsHouseNumber && registry.get(parentParentName + '.street.1') && registry.get(parentParentName + '.street.1').get('value')) {
+                    current_street_value = this.removeOldAdditionFromString(registry.get(parentParentName + '.street.1').get('value'));
+                    addition = (newValue) ? ' ' + newValue : '';
+                    new_street_value = current_street_value + addition;
+                    registry.get(parentParentName + '.street.1').set('value', new_street_value);
+                    console.log(new_street_value);
+                } else {
+                    current_street_value = this.removeOldAdditionFromString(registry.get(parentParentName + '.street.0').get('value'));
+                    addition = (newValue) ? ' ' + newValue : '';
+                    new_street_value = current_street_value + addition;
+                    registry.get(parentParentName + '.street.0').set('value', new_street_value);
+                }
             }
 
             this.previousValue = newValue;
-
         },
+        
         removeOldAdditionFromString: function (street) {
             if (this.previousValue != undefined && this.previousValue && street) {
                 var streetParts = ("" + street).split(" ");

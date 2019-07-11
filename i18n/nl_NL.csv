@@ -42,8 +42,8 @@ Enabled,Geactiveerd
 "Api key","Api key"
 "Api secret","Api secret"
 "Advanced Configuration","Geavanceerde configuratie"
-"Use street 2 for housenumber","Gebruik street 2 voor huisnummer"
-"Use street 3 for housenumber addition","Gebruik street 3 voor huisnummer toevoeging"
+"Seperate housenumber to next street field","Splits huisnummer naar volgend straat veld"
+"Seperate housenumber addition to next street field","Splits huisnummer toevoeging naar volgend straat veld"
 "Always show country selector","Toon altijd het land-selectie veld"
 Debug,Debug
-"Full in your shipping address below:","Vul hieronder je verzendadres in:"
+"Fill in your shipping address below:","Vul hieronder je verzendadres in:"
