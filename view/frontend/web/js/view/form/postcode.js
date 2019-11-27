@@ -496,9 +496,15 @@ define([
                 preview += street + ' ';
             });
 
-            preview += "<br/>" + address.postcode + "<br/>";
-            preview += address.city;
-            preview += "</i>"
+            if (address.postcode) {
+                preview += "<br/>" + address.postcode + "<br/>";
+            }
+
+            if (address.city) {
+                preview += address.city;
+            }
+
+            preview += "</i>";
 
             this.notice(preview);
         },
