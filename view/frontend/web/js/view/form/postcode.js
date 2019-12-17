@@ -176,6 +176,7 @@ define([
                 registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').set('visible', true);
             }
 
+            registry.get(self.parentName + '.postcode').set('value', formData.experius_postcode_postcode).set('error', false);
             if (formData.experius_postcode_postcode && formData.experius_postcode_housenumber && formData.experius_postcode_disable !== true && formData.country_id == 'NL') {
                 this.debug('start postcode lookup');
                 clearTimeout(this.emailCheckTimeout);
@@ -190,7 +191,6 @@ define([
                     registry.get(self.parentName + '.street.0').set('value', formData.street + ' ' + formData.experius_postcode_housenumber).set('error', false);
                     self.debug('address on single line');
                 }
-                registry.get(self.parentName + '.postcode').set('value', formData.experius_postcode_postcode).set('error', false);
                 if (
                     typeof registry.get(self.parentName + '.street.0').get('value') == 'object' ||
                     registry.get(self.parentName + '.street.0').get('value') == '[object Object] '
@@ -543,7 +543,7 @@ define([
 
             this.previousValue = newValue;
         },
-        
+
         removeOldAdditionFromString: function (street) {
             if (this.previousValue != undefined && this.previousValue && street) {
                 var streetParts = ("" + street).split(" ");
