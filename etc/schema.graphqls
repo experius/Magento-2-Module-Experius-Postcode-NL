@@ -1,0 +1,27 @@
+type Query {
+    postcode (
+        postcode: String @doc(description: "Postcode")
+        houseNumber: String @doc(description: "Housenumber")
+        houseNumberAddition: String @doc(description: "Housenumber Addition")
+    ): postCodeAddress @resolver(class: "Experius\\Postcode\\Model\\Resolver\\Postcode") @doc(description: "Returns Json Encoded AddressInfo") @cache(cacheIdentity: "Experius\\Postcode\\Model\\Resolver\\Postcode\\Identity")
+}
+
+type postCodeAddress {
+    street: String @doc(description: "Street name in accordance with \"BAG (Basisregistraties adressen en gebouwen)\". In capital and lowercase letters, including punctuation marks and accents. This field is at most 80 characters in length. Filled with \"Postbus\" in case it is a range of PO boxes.")
+    houseNumber: Int @doc(description: "House number of a perceel. In case of a Postbus match the house number will always be 0. Range: 0-99999")
+    houseNumberAddition: String @doc(description: "Addition of the house number to uniquely define a location. These additions are officially recognized by the municipality. This field is at most 6 characters in length and null if addition not found (see houseNumberAdditions result field).")
+    postcode: String @doc(description: "Four digit neighborhood code (first part of a postcode). Range: 1000-9999 plus two character letter combination (second part of a postcode). Range: \"AA\"-\"ZZ\"")
+    city: String @doc(description: "Official city name in accordance with \"BAG (Basisregistraties adressen en gebouwen)\". In capital and lowercase letters, including punctuation marks and accents. This field is at most 80 characters in length.")
+    municipality: String @doc(description: "Municipality name in accordance with \"BAG (Basisregistraties adressen en gebouwen)\". In capital and lowercase letters, including punctuation marks and accents. This field is at most 80 characters in length.")
+    province: String @doc(description: "Official name of the province, correctly cased and with dashes where applicable.")
+    rdX: Int @doc(description: "X coordinate according to Dutch Rijksdriehoeksmeting \"(EPSG) 28992 Amersfoort / RD New\". Values range from 0 to 300000 meters. Null for PO Boxes.")
+    rdY: Int @doc(description: "Y coordinate according to Dutch Rijksdriehoeksmeting \"(EPSG) 28992 Amersfoort / RD New\". Values range from 300000 to 620000 meters. Null for PO Boxes.")
+    latitude: Float @doc(description: "Latitude of address. Null for PO Boxes.")
+    longitude: Float @doc(description: "Longitude of address. Null for PO Boxes.")
+    bagNumberDesignationId: String @doc(description: "Dutch term used in BAG: \"nummeraanduiding id\".")
+    bagAddressableObjectId: String @doc(description: "Dutch term used in BAG: \"adresseerbaar object id\". Unique identification for objects which have 'building', 'house boat site', or 'mobile home site' as addressType.")
+    addressType: String @doc(description: "Type of this address. (https://api.postcode.nl/documentation/Documentation/postcodeNlTypes for possible values)")
+    purposes: [String] @doc(description: "List of all purposes (Dutch: \"gebruiksdoelen\"). Null or an array of text values. (https://api.postcode.nl/documentation/Documentation/postcodeNlTypes for possible values)")
+    surfaceArea: Int @doc(description: "Surface in square meters. Null for PO Boxes.")
+    houseNumberAdditions: [String] @doc(description: "List of all house number additions having the postcode and houseNumber which was input.")
+}
