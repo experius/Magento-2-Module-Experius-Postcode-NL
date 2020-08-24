@@ -12,15 +12,14 @@
 
 namespace Experius\Postcode\Helper;
 
-use Magento\Framework\App\Helper\Context;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class Data extends AbstractHelper
 {
-
     const API_TIMEOUT = 3;
     const API_URL = 'https://api.postcode.nl';
 
@@ -56,7 +55,6 @@ class Data extends AbstractHelper
         parent::__construct($context);
     }
 
-
     /**
      * Get the html for initializing validation script.
      *
@@ -75,7 +73,7 @@ class Data extends AbstractHelper
             'postcodenl_api/advanced_config/use_street3_as_housenumber_addition'
         );
         $neverHideCountry = $this->getConfigBoolString('postcodenl_api/advanced_config/never_hide_country');
-        $settings = [
+        return [
             "useStreet2AsHouseNumber" => (boolean)$useStreet2AsHousenumber,
             "useStreet3AsHouseNumberAddition" => $useStreet3AsHousenumberAddition,
             "neverHideCountry" => $neverHideCountry,
@@ -84,8 +82,6 @@ class Data extends AbstractHelper
                 "defaultError" => htmlspecialchars(__('Unknown postcode + housenumber combination.'))
             ]
         ];
-
-        return $settings;
     }
 
     /**
@@ -169,7 +165,6 @@ class Data extends AbstractHelper
     protected function processErrorMessage($jsonData, $response)
     {
         if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
-
             if ($this->httpResponseCode == 400 || $this->httpResponseCode == 404) {
                 if (in_array($jsonData['exceptionId'], [
                     'PostcodeNl_Controller_Address_PostcodeTooShortException',
@@ -201,11 +196,9 @@ class Data extends AbstractHelper
                 $response['message'] = __('Postcode service unavailable, please use manual input');
                 $response['messageTarget'] = 'housenumber';
             } else {
-                if (is_array($jsonData) && isset($jsonData['exceptionId'])) {
-                    $response['message'] = __('Validation error, please use manual input.');
-                    $response['messageTarget'] = 'housenumber';
-                    $response['useManual'] = true;
-                }
+                $response['message'] = __('Validation error, please use manual input.');
+                $response['messageTarget'] = 'housenumber';
+                $response['useManual'] = true;
             }
         } else {
             $response['message'] = __('Validation unavailable, please use manual input.');
@@ -280,7 +273,7 @@ class Data extends AbstractHelper
                     // We have not received a valid JSON response
 
                     $message = __('The response from the Postcode.nl service could not be understood.');
-                    $info[] = '- ' . __('The service might be temporarily unavailable, if problems persist, '.
+                    $info[] = '- ' . __('The service might be temporarily unavailable, if problems persist, ' .
                             'please contact <a href=\'mailto:info@postcode.nl\'>info@postcode.nl</a>.');
                     $info[] = '- ' . __('Technical reason: No valid JSON was returned by the request.');
                 } else {
@@ -314,7 +307,7 @@ class Data extends AbstractHelper
                             // This message is thrown when the JSON returned did not contain the data expected.
 
                             $message = __('The response from the Postcode.nl service could not be understood.');
-                            $info[] = '- ' . __('The service might be temporarily unavailable, if problems persist, '.
+                            $info[] = '- ' . __('The service might be temporarily unavailable, if problems persist, ' .
                                 'please contact <a href=\'mailto:info@postcode.nl\'>info@postcode.nl</a>.');
                             $info[] = '- ' . __('Technical reason: Received JSON data did not contain expected data.');
                         } else {
@@ -326,11 +319,11 @@ class Data extends AbstractHelper
             }
         }
 
-        return array(
+        return [
             'message' => $message,
             'status' => $status,
             'info' => $info,
-        );
+        ];
     }
 
     protected function processHttpClientErrorInfo($addressData, $info)
@@ -341,10 +334,10 @@ class Data extends AbstractHelper
             'SSL certificate problem, verify that the CA cert is OK'
         ) !== false) {
             $info[] = __('Your servers\' \'cURL SSL CA bundle\' is missing or outdated. Further information:');
-            $info[] = '- <a href="https://stackoverflow.com/questions/6400300/https-and-ssl3-get-server-'.
-                'certificatecertificate-verify-failed-ca-is-ok" target="_blank">'.
+            $info[] = '- <a href="https://stackoverflow.com/questions/6400300/https-and-ssl3-get-server-' .
+                'certificatecertificate-verify-failed-ca-is-ok" target="_blank">' .
                 __('How to update/fix your CA cert bundle') . '</a>';
-            $info[] = '- <a href="https://curl.haxx.se/docs/sslcerts.html" target="_blank">'.
+            $info[] = '- <a href="https://curl.haxx.se/docs/sslcerts.html" target="_blank">' .
                 __('About cURL SSL CA certificates') . '</a>';
             $info[] = '';
         } else {
@@ -353,7 +346,7 @@ class Data extends AbstractHelper
                 'unable to get local issuer certificate'
             ) !== false) {
                 $info[] = __('cURL cannot read/access the CA cert file:');
-                $info[] = '- <a href="https://curl.haxx.se/docs/sslcerts.html" target="_blank">'.
+                $info[] = '- <a href="https://curl.haxx.se/docs/sslcerts.html" target="_blank">' .
                     __('About cURL SSL CA certificates') . '</a>';
                 $info[] = '';
             } else {
@@ -361,8 +354,8 @@ class Data extends AbstractHelper
             }
         }
         $info[] = __('Error message:') . ' "' . $addressData['debugInfo']['httpClientError'] . '"';
-        $info[] = '- <a href="https://www.google.com/search?q='.
-            urlencode($addressData['debugInfo']['httpClientError']).
+        $info[] = '- <a href="https://www.google.com/search?q=' .
+            urlencode($addressData['debugInfo']['httpClientError']) .
             '" target="_blank">' . __('Google the error message') . '</a>';
         $info[] = '- ' . __('Contact your hosting provider if problems persist.');
         return $info;
@@ -435,7 +428,8 @@ class Data extends AbstractHelper
     protected function checkApiReady()
     {
         if (!$this->debuggingOverride
-            && !($this->getStoreConfig('postcodenl_api/general/enabled')
+            && !(
+                $this->getStoreConfig('postcodenl_api/general/enabled')
                 || $this->getStoreConfig('postcodenl_api/advanced_config/admin_validation_enabled')
             )
         ) {
