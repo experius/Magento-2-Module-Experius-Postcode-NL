@@ -59,7 +59,7 @@ class Postcode implements ResolverInterface
 
         $result = $this->postcodeHelper->lookupAddress($args['postcode'], $args['houseNumber'], $args['houseNumberAddition']);
         if (isset($result['message'])) {
-            throw new LocalizedException(__($result['message']));
+            throw new GraphQlInputException($result['message']);
         }
         return $result;
     }
