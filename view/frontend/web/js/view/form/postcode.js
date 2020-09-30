@@ -83,11 +83,7 @@ define([
                 this.toggleHousenumberAdditionFields(this.getAddressData());
                 var formData = this.source.get(this.customScope);
                 if (formData.experius_postcode_housenumber) {
-                    if (this.getSettings().useStreet2AsHouseNumber) {
-                        registry.get(this.parentName + '.street.1').set('value', formData.experius_postcode_housenumber).set('error', false);
-                    } else {
-                        registry.get(this.parentName + '.street.0').set('value', formData.street + ' ' + formData.experius_postcode_housenumber).set('error', false);
-                    }
+                    this.postcodeHasChanged();
                 }
             } else if (registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_disable').get('visible')) {
                 this.hideFields();
@@ -187,17 +183,10 @@ define([
                     registry.get(self.parentName + '.street.1').set('value', formData.experius_postcode_housenumber).set('error', false);
                     self.debug('address on two lines');
                 } else {
-                    registry.get(self.parentName + '.street.0').set('value', formData.street + ' ' + formData.experius_postcode_housenumber).set('error', false);
+                    registry.get(self.parentName + '.street.0').set('value', self.formatAddress()).set('error', false);
                     self.debug('address on single line');
                 }
                 registry.get(self.parentName + '.postcode').set('value', formData.experius_postcode_postcode).set('error', false);
-                if (
-                    typeof registry.get(self.parentName + '.street.0').get('value') == 'object' ||
-                    registry.get(self.parentName + '.street.0').get('value') == '[object Object] '
-                ) {
-                    this.debug('Fixing street.0 as it contains [object Object]');
-                    registry.get(self.parentName + '.street.0').set('value', '').set('error', false);
-                }
                 this.debug('postcode or housenumber not set. ' + 'housenumber:' + formData.experius_postcode_housenumber + ' postcode:' + formData.experius_postcode_postcode);
             }
         },
@@ -408,7 +397,11 @@ define([
                         registry.get(self.parentName + '.street.1').set('value', response.houseNumber.toString()).set('error', false);
                         self.debug('address on two lines');
                     } else {
-                        registry.get(self.parentName + '.street.0').set('value', response.street + ' ' + response.houseNumber).set('error', false);
+                        var address = self.formatAddress({
+                            street: response.street,
+                            housenumber: response.houseNumber
+                        });
+                        registry.get(self.parentName + '.street.0').set('value', address).set('error', false);
                         self.debug('address on single line');
                     }
                     registry.get(self.parentName + '.country_id').set('value', 'NL').set('error', false);
@@ -533,16 +526,13 @@ define([
                     registry.get(parentParentName + '.street.1').set('value', new_street_value);
                     console.log(new_street_value);
                 } else {
-                    current_street_value = this.removeOldAdditionFromString(registry.get(parentParentName + '.street.0').get('value'));
-                    addition = (newValue) ? ' ' + newValue : '';
-                    new_street_value = current_street_value + addition;
-                    registry.get(parentParentName + '.street.0').set('value', new_street_value);
+                    registry.get(parentParentName + '.street.0').set('value', this.formatAddress());
                 }
             }
 
             this.previousValue = newValue;
         },
-        
+
         removeOldAdditionFromString: function (street) {
             if (this.previousValue != undefined && this.previousValue && street) {
                 var streetParts = ("" + street).split(" ");
@@ -553,6 +543,73 @@ define([
                 return street;
             }
             return street;
+        },
+
+        formatAddress: function(overrideData) {
+            var formData = this.source.get(this.customScope);
+            if (!formData) {
+                return null;
+            }
+            overrideData = overrideData || {};
+
+            // User overridden value or the one in formdata
+            var address = overrideData.street || (typeof(formData.street) == 'object' ? formData.street[0] : formData.street);
+            var postcode = overrideData.postcode || formData.experius_postcode_postcode;
+            var houseNo = overrideData.housenumber || formData.experius_postcode_housenumber;
+            var houseNoAdd = overrideData.housenumber_addition || formData.experius_postcode_housenumber_addition_manual;
+
+            // If street is already set while not recorded. This means value is set by a third party.
+            // Here we snapshot the current values into the previous value to avoid duplicate value addition
+            if(this.previousStreet !== address) {
+                this.previousPostcodeValue = postcode;
+                this.previousHousenumberValue = houseNo;
+                this.previousValue = this.previousHousenumberAdd = houseNoAdd;
+                this.previousStreet = address;
+            }
+
+            if(this.previousHousenumberValue || this.previousHousenumberAdd || this.previousValue || this.previousPostcodeValue) {
+                // Remove addition
+                if(this.previousValue || this.previousHousenumberAdd) {
+                    address = this.removeOldValueAdditionFromString(address, this.previousValue || this.previousHousenumberAdd);
+                }
+
+                // Remove house number
+                if(this.previousHousenumberValue) {
+                    address = this.removeOldValueAdditionFromString(address, this.previousHousenumberValue);
+                }
+            }
+
+            if(houseNo) { // Add house number
+                address += ' ' + houseNo;
+            }
+            if(houseNoAdd) { // Add house number addition
+                address += ' ' + houseNoAdd;
+            }
+
+            // Save current values
+            this.previousPostcodeValue = postcode;
+            this.previousHousenumberValue = houseNo;
+            this.previousValue = this.previousHousenumberAdd = houseNoAdd;
+            this.previousStreet = address || undefined;
+
+            return address;
+
+        },
+
+        /**
+         * Removes given stubstring from the end of the given value string if possible
+         * @param value
+         * @param addition
+         * @returns {string|*}
+         */
+        removeOldValueAdditionFromString: function (value, addition) {
+            var newValue = value.trim();
+            var strAddition = "" + addition;
+            if(newValue.endsWith(strAddition)) {
+                return newValue.substr(newValue, newValue.length - strAddition.length).trim();
+            } else {
+                return value;
+            }
         }
     });
 });
