@@ -19,18 +19,12 @@
 
 [View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.4.1)
 
+*  [DOC] Cleaned some code *(René Schep)*
+*  [FEATURE] Added support for GraphQl *(René Schep)*
 *  [FEATURE] Added magento version restriction *(René Schep)*
 *  [BUGFIX] Typo *(René Schep)*
 *  [BUGFIX] Fixed version restraint *(René Schep)*
 *  [FEATURE] Updated GraphQl Exception type for lookupAddress errors *(René Schep)*
-
-
-## 1.4.0 (2020-08-24)
-
-[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.4.0)
-
-*  [DOC] Cleaned some code *(René Schep)*
-*  [FEATURE] Added support for GraphQl *(René Schep)*
 
 
 ## 1.3.4 (2020-04-09)
