@@ -170,7 +170,7 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
                     'config' => [
                         "customScope" => $scope,
                         "template" => 'ui/form/field',
-                        "elementTmpl" => 'ui/form/element/input'
+                        "elementTmpl" => 'Experius_Postcode/form/element/housenumber'
                     ],
                     'provider' => 'checkoutProvider',
                     'dataScope' => $scope . '.experius_postcode_housenumber',

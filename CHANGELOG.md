@@ -1,3 +1,52 @@
+## 1.5.0 (2020-10-01)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.5.0)
+
+*  [FEATURE] Changed the template for the housenumber to set input type number *(Lewis Voncken)*
+
+
+## 1.4.2 (2020-09-30)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.4.2)
+
+*  Update URLs, services.postcode.nl no longer exists *(SjonHortensius)*
+*  Prevent javascript error by adding a warning comment when you want to use seperate address fields *(joeydankbaar)*
+*  [BUGFIX] Fixed issue where street gets [object] in name. *(Egor Dmitriev)*
+*  [BUGFIX] Fixed issue where street gets duplicate values while changing housenumber, additon or on initial load *(Egor Dmitriev)*
+
+
+## 1.4.1 (2020-09-22)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.4.1)
+
+*  [FEATURE] Added magento version restriction *(René Schep)*
+*  [BUGFIX] Typo *(René Schep)*
+*  [BUGFIX] Fixed version restraint *(René Schep)*
+*  [FEATURE] Updated GraphQl Exception type for lookupAddress errors *(René Schep)*
+
+
+## 1.4.0 (2020-08-24)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.4.0)
+
+*  [DOC] Cleaned some code *(René Schep)*
+*  [FEATURE] Added support for GraphQl *(René Schep)*
+
+
+## 1.3.4 (2020-04-09)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.3.4)
+
+*  [BUGFIX] removed region_id set, expects an int not a string. *(Experius)*
+
+
+## 1.3.3 (2019-11-27)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.3.3)
+
+*  Prevent notice showing undefined *(jordy2607)*
+
+
 ## 1.3.2 (2019-11-21)
 
 [View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.3.2)
