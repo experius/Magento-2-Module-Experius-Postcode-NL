@@ -11,9 +11,7 @@
         "OSL-3.0"
     ],
     "minimum-stability": "dev",
-    "require": {
-        "magento/framework": "^102.0.0"
-    },
+    "require": {},
     "autoload": {
         "files": [
             "registration.php"
