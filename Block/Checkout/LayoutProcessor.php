@@ -21,12 +21,11 @@
 
 namespace Experius\Postcode\Block\Checkout;
 
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
+use Magento\Framework\View\Element\AbstractBlock;
 
 class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
 {
-
     protected $scopeConfig;
 
     protected $logger;
@@ -43,14 +42,21 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
         parent::__construct($context, $data);
     }
 
+    /**
+     * Process js Layout of block
+     *
+     * @param array $result ($jsLayout)
+     * @return array
+     */
     public function process($result)
     {
-        if ($this->scopeConfig->getValue(
-            'postcodenl_api/general/enabled',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )
-        && isset($result['components']['checkout']['children']['steps']['children']['shipping-step']['children']
-            ['shippingAddress']['children']['shipping-address-fieldset'])
+        if (
+            $this->scopeConfig->getValue(
+                'postcodenl_api/general/enabled',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+            && isset($result['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+                ['shippingAddress']['children']['shipping-address-fieldset'])
         ) {
             $this->changeFieldPositions = $this->scopeConfig->getValue(
                 'postcodenl_api/advanced_config/change_sort_order',
@@ -60,11 +66,6 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
             $shippingFields = $result['components']['checkout']['children']['steps']['children']
             ['shipping-step']['children']['shippingAddress']['children']
             ['shipping-address-fieldset']['children'];
-
-            /*if(isset($shippingFields['street'])){
-                unset($shippingFields['street']['children'][1]['validation']);
-                unset($shippingFields['street']['children'][2]['validation']);
-            }*/
 
             $shippingFields = array_merge($shippingFields, $this->getPostcodeFieldSet('shippingAddress', 'shipping'));
 
@@ -83,6 +84,12 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
         return $result;
     }
 
+    /**
+     * Get billing form fields
+     *
+     * @param array $result
+     * @return array
+     */
     public function getBillingFormFields($result)
     {
         if (isset(
@@ -124,27 +131,40 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
         return $result;
     }
 
+    /**
+     * Get postcode fieldset
+     *
+     * @param $scope
+     * @param $addressType
+     * @return array[]
+     */
     public function getPostcodeFieldSet($scope, $addressType)
     {
         return [
-            'experius_postcode_fieldset' =>
-                [
-                    'component' => 'Experius_Postcode/js/view/form/postcode',
-                    'type' => 'group',
-                    'config' => [
-                        "customScope" => $scope,
-                        "template" => 'Experius_Postcode/form/group',
-                        "additionalClasses" => "experius_postcode_fieldset",
-                        "loaderImageHref" => $this->getViewFileUrl('images/loader-1.gif')
-                    ],
-                    'sortOrder' => '905',
-                    'children' => $this->getPostcodeFields($scope, $addressType),
-                    'provider' => 'checkoutProvider',
-                    'addressType' => $addressType,
-                ]
+            'experius_postcode_fieldset' => [
+                'component' => 'Experius_Postcode/js/view/form/postcode',
+                'type' => 'group',
+                'config' => [
+                    "customScope" => $scope,
+                    "template" => 'Experius_Postcode/form/group',
+                    "additionalClasses" => "experius_postcode_fieldset",
+                    "loaderImageHref" => $this->getViewFileUrl('images/loader-1.gif')
+                ],
+                'sortOrder' => (string)($this->getStartSortOrder() + 5),
+                'children' => $this->getPostcodeFields($scope, $addressType),
+                'provider' => 'checkoutProvider',
+                'addressType' => $addressType,
+            ]
         ];
     }
 
+    /**
+     * Get postcode fields
+     *
+     * @param $scope
+     * @param $addressType
+     * @return array[]
+     */
     public function getPostcodeFields($scope, $addressType)
     {
         $postcodeFields =
@@ -159,7 +179,7 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
                     'provider' => 'checkoutProvider',
                     'dataScope' => $scope . '.experius_postcode_postcode',
                     'label' => __('Postcode'),
-                    'sortOrder' => '915',
+                    'sortOrder' => (string)($this->getStartSortOrder() + 15),
                     'validation' => [
                         'required-entry' => true,
                         'min_text_length' => 6,
@@ -175,7 +195,7 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
                     'provider' => 'checkoutProvider',
                     'dataScope' => $scope . '.experius_postcode_housenumber',
                     'label' => __('Housenr.'),
-                    'sortOrder' => '925',
+                    'sortOrder' => (string)($this->getStartSortOrder() + 25),
                     'validation' => [
                         'required-entry' => true,
                     ],
@@ -190,7 +210,7 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
                     'provider' => 'checkoutProvider',
                     'dataScope' => $scope . '.experius_postcode_housenumber_addition',
                     'label' => __('Addition'),
-                    'sortOrder' => '927',
+                    'sortOrder' => (string)($this->getStartSortOrder() + 30),
                     'validation' => [
                         'required-entry' => false,
                     ],
@@ -207,7 +227,7 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
                     'provider' => 'checkoutProvider',
                     'dataScope' => $scope . '.experius_postcode_housenumber_addition_manual',
                     'label' => __('Addition'),
-                    'sortOrder' => '927',
+                    'sortOrder' => (string)($this->getStartSortOrder() + 30),
                     'validation' => [
                         'required-entry' => false,
                     ],
@@ -224,7 +244,7 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
                     'provider' => 'checkoutProvider',
                     'dataScope' => $scope . '.experius_postcode_disable',
                     'description' => __('Enter address manually'),
-                    'sortOrder' => '1004',
+                    'sortOrder' => (string)($this->getStartSortOrder() + 50),
                     'validation' => [
                         'required-entry' => false,
                     ],
@@ -235,39 +255,71 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
         return $postcodeFields;
     }
 
+    /**
+     * Change address fields position(s)
+     *
+     * @param $addressFields
+     * @return mixed
+     */
     public function changeAddressFieldPosition($addressFields)
     {
+        if (isset($addressFields['country_id'])) {
+            $addressFields['country_id']['sortOrder'] = (string)($this->getStartSortOrder());
+        }
+
+        // 'experius_postcode_fieldset' is $this->getStartSortOrder() + 5
 
         if (isset($addressFields['street'])) {
-            $addressFields['street']['sortOrder'] = '910';
+            $addressFields['street']['sortOrder'] = (string)($this->getStartSortOrder() + 10);
         }
 
-        if (isset($addressFields['postcode'])) {
-            $addressFields['postcode']['sortOrder'] = '930';
-        }
+        // 'experius_postcode_postcode' field default is + 15
 
         if (isset($addressFields['city'])) {
-            $addressFields['city']['sortOrder'] = '920';
+            $addressFields['city']['sortOrder'] = (string)($this->getStartSortOrder() + 20);
+        }
+
+        // 'experius_postcode_housenumber' is + 25
+        // 'experius_postcode_housenumber_addition' and 'experius_postcode_housenumber_addition_manual' are + 30
+
+        if (isset($addressFields['postcode'])) {
+            $addressFields['postcode']['sortOrder'] = (string)($this->getStartSortOrder() + 35);
         }
 
         if (isset($addressFields['region'])) {
-            $addressFields['region']['sortOrder'] = '940';
+            $addressFields['region']['sortOrder'] = (string)($this->getStartSortOrder() + 40);
         }
 
         if (isset($addressFields['region_id'])) {
-            $addressFields['region_id']['sortOrder'] = '945';
+            $addressFields['region_id']['sortOrder'] = (string)($this->getStartSortOrder() + 45);
         }
 
-        if (isset($addressFields['country_id'])) {
-            $addressFields['country_id']['sortOrder'] = '900';
-        }
+        // 'experius_postcode_disable' is + 50
 
         return $addressFields;
     }
 
+    /**
+     * Get start sort order
+     * Hook for plugins to alter it's default: 900
+     *
+     * @TODO: Introduce system configuration to alter this value
+     * @return int
+     */
+    public function getStartSortOrder()
+    {
+        return 900;
+    }
+
+    /**
+     * Add classes to address fields
+     *
+     * @param $scope
+     * @param $addressFields
+     * @return mixed
+     */
     public function addClasses($scope, $addressFields)
     {
-
         foreach (['street', 'region_id', 'region', 'country_id', 'city', 'postcode'] as $field) {
             if (isset($addressFields[$field])) {
                 $configAdditionalClasses = null;
