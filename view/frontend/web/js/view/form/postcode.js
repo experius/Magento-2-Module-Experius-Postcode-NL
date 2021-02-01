@@ -546,6 +546,9 @@ define([
         },
 
         formatAddress: function(overrideData) {
+            if (!this.source) {
+                return null;
+            }
             var formData = this.source.get(this.customScope);
             if (!formData) {
                 return null;
