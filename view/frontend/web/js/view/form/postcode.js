@@ -559,7 +559,10 @@ define([
             var address = overrideData.street || (typeof(formData.street) == 'object' ? formData.street[0] : formData.street);
             var postcode = overrideData.postcode || formData.experius_postcode_postcode;
             var houseNo = overrideData.housenumber || formData.experius_postcode_housenumber;
-            var houseNoAdd = overrideData.housenumber_addition || formData.experius_postcode_housenumber_addition_manual;
+            var houseNoAdd = overrideData.housenumber_addition || formData.experius_postcode_housenumber_addition;
+            if (registry.get(this.parentName + '.experius_postcode_fieldset.experius_postcode_housenumber_addition_manual').visible()) {
+                houseNoAdd = formData.experius_postcode_housenumber_addition_manual;
+            }
 
             // If street is already set while not recorded. This means value is set by a third party.
             // Here we snapshot the current values into the previous value to avoid duplicate value addition
