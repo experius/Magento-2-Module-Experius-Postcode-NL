@@ -21,7 +21,7 @@ use Magento\Store\Model\ScopeInterface;
 class Data extends AbstractHelper
 {
     const API_TIMEOUT = 3;
-    const API_URL = 'https://api.postcode.nl';
+    const API_URL = 'https://api.postcode.eu';
 
     const EXCEPTION_NOT_AUTHORIZED = 'PostcodeNl_Controller_Plugin_HttpBasicAuthentication_NotAuthorizedException';
     const EXCEPTION_PASSWORD_NOT_CORRECT =
@@ -141,7 +141,7 @@ class Data extends AbstractHelper
         $urlEncPostcode = rawurlencode($postcode);
         $urlEncHousenumber = rawurlencode($houseNumber);
         $urlEncHousenumberAdd = rawurlencode($houseNumberAddition);
-        $url = "{$this->getServiceUrl()}/rest/addresses/{$urlEncPostcode}/{$urlEncHousenumber}/{$urlEncHousenumberAdd}";
+        $url = "{$this->getServiceUrl()}/nl/v1/addresses/postcode/{$urlEncPostcode}/{$urlEncHousenumber}/{$urlEncHousenumberAdd}";
 
         $jsonData = $this->callApiUrlGet($url);
 
