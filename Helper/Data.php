@@ -458,7 +458,7 @@ class Data extends AbstractHelper
         return false;
     }
 
-    protected function callApiUrlGet($url)
+    public function callApiUrlGet($url)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
