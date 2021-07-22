@@ -138,6 +138,8 @@ class Data extends AbstractHelper
             return $response;
         }
 
+        $houseNumber = str_replace(' ', '', $houseNumber);
+        
         $urlEncPostcode = rawurlencode($postcode);
         $urlEncHousenumber = rawurlencode($houseNumber);
         $urlEncHousenumberAdd = rawurlencode($houseNumberAddition);
