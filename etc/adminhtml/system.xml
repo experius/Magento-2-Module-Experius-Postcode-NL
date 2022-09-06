@@ -22,7 +22,7 @@
                 </field>
                 <field id="api_key_is_valid" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="40" translate="label" type="text">
                     <label>Api Key is valid</label>
-                    <frontend_model>Experius\Postcode\Block\System\Config\Form\Field\ReadOnly</frontend_model>
+                    <frontend_model>Experius\Postcode\Block\System\Config\Form\Field\OnlyRead</frontend_model>
                 </field>
                 <field id="api_key_checker" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="41" translate="label" type="button">
                     <button_label>Check Api Key</button_label>
