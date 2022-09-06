@@ -368,17 +368,17 @@ class Data extends AbstractHelper
 
     protected function getKey()
     {
-        return trim($this->getStoreConfig('postcodenl_api/general/api_key'));
+        return trim($this->getStoreConfig('postcodenl_api/general/api_key') ?? '');
     }
 
     protected function getSecret()
     {
-        return trim($this->getStoreConfig('postcodenl_api/general/api_secret'));
+        return trim($this->getStoreConfig('postcodenl_api/general/api_secret') ?? '');
     }
 
     protected function getServiceUrl()
     {
-        $serviceUrl = trim($this->getStoreConfig('postcodenl_api/development_config/api_url'));
+        $serviceUrl = trim($this->getStoreConfig('postcodenl_api/development_config/api_url') ?? '');
         if (empty($serviceUrl)) {
             $serviceUrl = self::API_URL;
         }
