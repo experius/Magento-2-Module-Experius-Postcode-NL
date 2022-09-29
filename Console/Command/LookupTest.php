@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Test extends Command
+class LookupTest extends Command
 {
 
     const NAME_ARGUMENT = "vat";
@@ -60,7 +60,7 @@ class Test extends Command
     protected function configure()
     {
         $this->setName("experius_postcode:test");
-        $this->setDescription("Test");
+        $this->setDescription("Lookup Address Test");
         $this->setDefinition([
             new InputArgument(self::NAME_ARGUMENT, InputArgument::OPTIONAL, "vat"),
             new InputOption(self::NAME_OPTION, "-a", InputOption::VALUE_NONE, "Option functionality")
