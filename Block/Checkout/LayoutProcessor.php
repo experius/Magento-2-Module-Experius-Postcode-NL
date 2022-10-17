@@ -100,7 +100,7 @@ class LayoutProcessor extends AbstractBlock implements LayoutProcessorInterface
             ['billing-step']['children']['payment']['children']
             ['payments-list']['children'];
 
-            foreach ($paymentForms as $paymentMethodForm => $paymentMethodValue) {
+            foreach (array_keys($paymentForms) as $paymentMethodForm) {
                 $paymentMethodCode = str_replace('-form', '', $paymentMethodForm);
 
                 if (!isset($result['components']['checkout']['children']['steps']['children']['billing-step']

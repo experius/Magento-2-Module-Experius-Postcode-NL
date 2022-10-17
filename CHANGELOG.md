@@ -1,3 +1,61 @@
+## 1.11.0 (2022-10-17)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.11.0)
+
+*  [BUGFIX][PWAI-716] Avoid unused variables; see details below. *(Boris van Katwijk)*
+
+
+## 1.10.0 (2022-09-06)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.10.0)
+
+*  Changed function because ReadOnly Class can not be used in PHP8.1 *(Demi Holland)*
+*  Edit trim function because PHP8.1 compatibility *(Demi Holland)*
+
+
+## 1.9.0 (2021-07-15)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.9.0)
+
+*  [FEATURE][DRRS-47] - Updated postcode api url with new url to keep continued support *(Rens Wolters)*
+
+
+## 1.8.2 (2021-05-12)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.8.2)
+
+*  [BUGFIX] - Fix housenumber addition *(Ruben Panis)*
+
+
+## 1.8.1 (2021-02-01)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.8.1)
+
+*  [BUGFIX] Solved "TypeError: Cannot read property 'get' of undefined" when country is set to Belgium *(Mr. Lewis)*
+
+
+## 1.8.0 (2020-10-28)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.8.0)
+
+*  [FEATURE] Introduce pluggable function to alter sort order of the postcode fields for different checkouts than the default Magento OnePage. *(Boris van Katwijk)*
+
+
+## 1.7.0 (2020-10-05)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.7.0)
+
+*  [FEATURE]Added pattern to housenumber input for numeric keyboard on ios *(joeydankbaar)*
+
+
+## 1.6.0 (2020-10-02)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.6.0)
+
+*  [DOCS] Updated the CHANGELOG.md *(Lewis Voncken)*
+*  [FEATURE] Split GraphQl functionality from module *(René Schep)*
+
+
 ## 1.5.0 (2020-10-01)
 
 [View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.5.0)
@@ -19,12 +77,18 @@
 
 [View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.4.1)
 
+*  [FEATURE] Updated GraphQl Exception type for lookupAddress errors *(René Schep)*
+
+
+## 1.4.0 (2020-09-15)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.4.0)
+
 *  [DOC] Cleaned some code *(René Schep)*
 *  [FEATURE] Added support for GraphQl *(René Schep)*
 *  [FEATURE] Added magento version restriction *(René Schep)*
 *  [BUGFIX] Typo *(René Schep)*
 *  [BUGFIX] Fixed version restraint *(René Schep)*
-*  [FEATURE] Updated GraphQl Exception type for lookupAddress errors *(René Schep)*
 
 
 ## 1.3.4 (2020-04-09)

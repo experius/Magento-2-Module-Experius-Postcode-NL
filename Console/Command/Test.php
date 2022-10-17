@@ -34,16 +34,14 @@ class Test extends Command
         parent::__construct('test');
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function execute(
         InputInterface $input,
         OutputInterface $output
     ) {
-        $vat = $input->getArgument(self::NAME_ARGUMENT);
-        $option = $input->getOption(self::NAME_OPTION);
-
-
         print_r($this->postcodeHelper->getJsinit(false));
-
 
         $testAddresses = [
             '3512VT' => '6'

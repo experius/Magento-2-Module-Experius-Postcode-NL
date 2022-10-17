@@ -29,6 +29,11 @@ class Checker extends Field
         return parent::render($element);
     }
 
+    /**
+     * @param AbstractElement $element
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function _getElementHtml(AbstractElement $element)
     {
         return $this->_toHtml();
