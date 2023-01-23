@@ -404,7 +404,9 @@ define([
                         registry.get(self.parentName + '.street.0').set('value', address).set('error', false);
                         self.debug('address on single line');
                     }
-                    registry.get(self.parentName + '.country_id').set('value', 'NL').set('error', false);
+                    if (registry.has(self.parentName + '.country_id')) {
+                        registry.get(self.parentName + '.country_id').set('value', 'NL').set('error', false);
+                    }                    
                     registry.get(self.parentName + '.city').set('value', response.city).set('error', false);
                     registry.get(self.parentName + '.postcode').set('value', response.postcode).set('error', false);
 
