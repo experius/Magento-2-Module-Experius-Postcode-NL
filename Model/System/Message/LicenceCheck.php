@@ -7,6 +7,16 @@ use Magento\Framework\Notification\MessageInterface;
 class LicenceCheck implements MessageInterface
 {
     const MESSAGE_IDENTITY = 'experius_system_message';
+    
+    /**
+     * @var \Experius\Postcode\Helper\Data 
+     */
+    protected $postcodeHelper;
+    
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface 
+     */
+    protected $scopeConfig;
 
     public function __construct(
         \Experius\Postcode\Helper\Data $postcodeHelper,
