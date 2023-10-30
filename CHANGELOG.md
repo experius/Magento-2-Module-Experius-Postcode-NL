@@ -1,3 +1,17 @@
+## 1.11.2 (2023-10-30)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.11.2)
+
+*  [BUGFIX][IN23-254] Avoid using closing slash with void tags. *(Boris van Katwijk)*
+
+
+## 1.11.1 (2023-07-12)
+
+[View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.11.1)
+
+*  Update LicenceCheck.php *(mhaagen85)*
+
+
 ## 1.11.0 (2022-10-17)
 
 [View Release](git@github.com:experius/Magento-2-Module-Experius-Postcode-NL.git/commits/tag/1.11.0)

@@ -489,7 +489,7 @@ define([
             });
 
             if (address.postcode) {
-                preview += "<br/>" + address.postcode + "<br/>";
+                preview += "<br>" + address.postcode + "<br>";
             }
 
             if (address.city) {
