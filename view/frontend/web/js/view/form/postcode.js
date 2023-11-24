@@ -30,7 +30,9 @@ define([
         },
 
         getAddressData: function () {
-            if (this.addressType == 'shipping' && typeof checkoutData.getShippingAddressFromData() !== 'undefined' && checkoutData.getShippingAddressFromData()) {
+            if (this.addressType == 'shipping' && this.source && this.source.shippingAddress && this.source.shippingAddress.country_id !== '') {
+                return this.source.shippingAddress;
+            } else if (this.addressType == 'shipping' && typeof checkoutData.getShippingAddressFromData() !== 'undefined' && checkoutData.getShippingAddressFromData()) {
                 return checkoutData.getShippingAddressFromData();
             } else if (this.addressType == 'billing' && typeof checkoutData.getBillingAddressFromData() !== 'undefined' && checkoutData.getBillingAddressFromData()) {
                 return checkoutData.getBillingAddressFromData();
