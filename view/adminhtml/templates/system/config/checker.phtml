@@ -1,4 +1,5 @@
 <?php /* @var $block \Experius\Postcode\Block\System\Config\Checker */ ?>
+<?php /* @var $escaper \Magento\Framework\Escaper */ ?>
     <script>
         require([
             'jquery',
@@ -6,11 +7,11 @@
         ], function (jQuery) {
 
             function apicheck() {
-                var params = {  
+                var params = {
                     apikey :    jQuery("#postcodenl_api_general_api_key").val(),
                     apisecret : jQuery("#postcodenl_api_general_api_secret").val()
                 };
-                new Ajax.Request('<?php echo $block->getAjaxUrl() ?>', {
+                new Ajax.Request('<?php echo $escaper->escapeUrl($block->getAjaxUrl()) ?>', {
                     loaderArea: true,
                     asynchronous: true,
                     parameters: params,
